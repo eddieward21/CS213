@@ -16,6 +16,35 @@ public enum Branch {
     }
 
 
+    public String getZip() {
+        return zip;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+
+    /**
+     *
+     * @param branchCode
+     * @return
+     */
+    public static Branch getBranchByCode(String branchCode) {
+        Branch[] branches = Branch.values();
+        for (Branch branch : branches) {
+            if (branch.getBranchCode().equals(branchCode)) {
+                return branch;
+            }
+        }
+        return null;
+    }
+
+
 
     public static void main(String[] args) {
 
