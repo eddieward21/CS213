@@ -3,21 +3,38 @@ public class Profile implements Comparable<Profile> {
     private String lname;
     private Date dob;
 
-
+    /**
+     *  Constructor to initialize the private variables
+     * @param fname the users first name
+     * @param lname the users last name
+     * @param dob the users dob
+     */
     public Profile(String fname, String lname, Date dob){
         this.fname = fname;
         this.lname = lname;
         this.dob = dob;
     }
 
+    /**
+     * A getter method to return the users first name
+     * @return the users first name
+     */
     public String getFName(){
         return fname;
     }
 
+    /**
+     * A getter method to return the users last name
+     * @return the users last name
+     */
     public String getLName(){
         return lname;
     }
 
+    /**
+     * A getter method to return the users dob
+     * @return the users dob
+     */
     public Date getDOB() {
         return dob;
     }

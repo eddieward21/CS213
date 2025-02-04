@@ -9,30 +9,47 @@ public enum Branch {
     private final String branchCode;
     private final String county;
 
+    /**
+     *  Constructor to initialize the private variables
+     * @param zip the branch zipcode
+     * @param branchCode the branch code
+     * @param county the branch county
+     */
     Branch(String zip, String branchCode, String county) {
         this.zip = zip;
         this.branchCode = branchCode;
         this.county = county;
     }
 
-
+    /**
+     * A getter method to get the value of Zip
+     * @return the zipcode of the branch
+     */
     public String getZip() {
         return zip;
     }
 
+    /**
+     *  A getter method to ge the value of branch code
+     * @return the branch code of the branch
+     */
     public String getBranchCode() {
         return branchCode;
     }
 
+    /**
+     * A getter method to get the value of the county
+     * @return the county of the branch
+     */
     public String getCounty() {
         return county;
     }
 
 
     /**
-     *
-     * @param branchCode
-     * @return
+     * Matching the Branch code to the correct branch
+     * @param branchCode the branch code of the current account
+     * @return the branch name of the branch code we are searching
      */
     public static Branch getBranchByCode(String branchCode) {
         Branch[] branches = Branch.values();

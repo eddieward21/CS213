@@ -6,10 +6,10 @@ public class Account implements Comparable<Account> {
 
 
     /**
-     *
-     * @param number
-     * @param holder
-     * @param balance
+     *  Constructor to initialize the private variables
+     * @param number the users account number
+     * @param holder the name of the holder
+     * @param balance the balance of the account
      */
     public Account(AccountNumber number, Profile holder, double balance) {
         this.number = number;
@@ -18,31 +18,35 @@ public class Account implements Comparable<Account> {
     }
 
 
-    /** To update the balance
-     *
-     * @param amount
+    /**
+     * To withdraw money from the account
+     * @param amount the user would like to withdraw
+     * @return 1 if deposit was valid, 0 if not valid
      */
-    public void withdraw(double amount) {
+    public int withdraw(double amount) {
         if (amount > 0 && amount >= balance){
             balance -= amount;
+            return 1;
         }
         else{
-            //How to throw error?
+            return 0;
         }
     }
 
     /**
-     *
-     * @param amount
+     * To deposit money into the account
+     * @param amount the user would like to deposit
+     * @return 1 if deposit was valid, 0 if not valid
      */
-    public void deposit(double amount) {
+    public int deposit(double amount) {
         if (amount > 0) {
             balance += amount;
+            return 1;
         }
         else{
-            //How to throw error?
+            return 0;
         }
-    } //to update the balance
+    }
 
 
     @Override
@@ -58,25 +62,40 @@ public class Account implements Comparable<Account> {
     //Account#[200017410] Holder[John Doe 2/19/2000] Balance[$600.00] Branch [BRIDGEWATER]
     @Override
     public String toString(){
-        return "Account*[" + this.number + "] Holder[" + this.holder + "] Balance[" + this.balance + "] Branch [" + // + "]";
-    }
+        return "Account*[" + this.number + "] Holder[" + this.holder + "] Balance[" + this.balance + "] Branch [" + this.number.getBranch() + "]";
+    } //Must implement getBranch()!!!
 
 
 
     @Override
     public int compareTo(Account account) {
-        //Ask in office hours
+        //Ask in class
     }
 
-    //Getter methods
+    /**
+     * A getter method to get the users account number
+     * @return the users acount number
+     */
     public AccountNumber getNumber() {
-        return number;
+        return number.getNumber(); //Method not implemented yet!!!
     }
 
+    /**
+     * A getter method to get the account holders name and dob
+     * @return the account holders name and dob
+     */
     public Profile getHolder() {
+        String fname = this.holder.getFName();
+        String lname = this.holder.getLName();
+        String dob = this.holder.getDOB(); //Method not implemented yet!!!
+        // What should I return? String?
         return holder;
     }
 
+    /**
+     * A getter method to get the accounts balance
+     * @return the accounts balance
+     */
     public double getBalance() {
         return balance;
     }
