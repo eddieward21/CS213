@@ -25,7 +25,7 @@ public class Account implements Comparable<Account> {
      */
     public int withdraw(double amount) {
         if (amount > 0 && amount >= balance){
-            balance -= amount;
+            balance -= amount; // Done in the database?
             return 1;
         }
         else{
@@ -40,7 +40,7 @@ public class Account implements Comparable<Account> {
      */
     public int deposit(double amount) {
         if (amount > 0) {
-            balance += amount;
+            balance += amount; //Done in the database?
             return 1;
         }
         else{
@@ -62,7 +62,7 @@ public class Account implements Comparable<Account> {
     //Account#[200017410] Holder[John Doe 2/19/2000] Balance[$600.00] Branch [BRIDGEWATER]
     @Override
     public String toString(){
-        return "Account*[" + this.number + "] Holder[" + this.holder + "] Balance[" + this.balance + "] Branch [" + this.number.getBranch() + "]";
+        return "Account*[" + this.number.getNumber() + "] Holder[" + this.holder.toString() + "] Balance[" + this.balance + "] Branch [" + this.number.getBranch() + "]";
     } //Must implement getBranch()!!!
 
 

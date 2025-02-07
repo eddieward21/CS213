@@ -3,16 +3,108 @@ public class AccountDatabase {
     private int size;
     private Archive archive; //a linked list of closed account
 
+    private static final int capacity = 4;
+
+    /**
+     * Constructor to initialize the accounts array with the fixed capacity length, the size to 0, and the archive as a new archive object
+     */
+    public AccountDatabase() {
+        this.accounts = new Account[capacity];
+        this.size = 0;
+        this.archive = new Archive();
+    }
+
+    /**
+     * Simple private method to find whether an account exists in the active system or not
+     * @param account the account we are looking for
+     * @return either the index of the account in the database, or -1 if not found
+     */
+    private int find(Account account) {
+        for(int i = 0; i < size; i++){
+            if (accounts[i].equals(account)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
-    private int find(Account account) {} //return the index or -1 not found.
-    private void grow() {} //increase the array capacity by 4
-    public boolean contains(Account account) {} //check before add/remove
-    public void add(Account account) {} //add to end of array
-    public void remove(Account account) {}//replace it with the last item
-    public boolean withdraw(AccountNumber number, double amount) {}
-    public void deposit(AccountNumber number, double amount) {}
-    public void printArchive() //print closed accounts
+    /**
+     * Increasing the size of the database another fixed capacity length, 4
+     */
+    private void grow() {
+        Account[] newAccounts = new Account[accounts.length + capacity];
+        System.arraycopy(accounts, 0, newAccounts, 0, accounts.length); //Intellij auto suggest arraycopy()
+        accounts = newAccounts;
+    }
+
+    /**
+     * Check if an account exits in the system
+     * @param account the account we are looking for
+     * @return true if found, false otherwise
+     */
+    public boolean contains(Account account) {
+        return find(account) != -1;
+    }
+
+    /**
+     * Add an account to the database, only if it doesn't already exist in the account
+     * @param account the account we would like to add
+     */
+    public void add(Account account) {
+        if(contains(account)){
+            return;
+        }
+        if(accounts.length == size){
+            grow();
+        }
+        accounts[size++] = account;
+    }
+
+    /**
+     * Remove an account if it exists in the database, and add to the archive
+     * @param account the account we want to remove
+     */
+    public void remove(Account account) {
+        if(contains(account)){
+            int idx = find(account);
+            accounts[idx] = accounts[size-1];
+            accounts[size-1] = null;
+            size -= 1;
+            //Must add to archive
+        }
+    }//replace it with the last item
+
+    /**
+     * Find the account that would like to withdraw money and call the withdrawal method created in Account()
+     * @param number the account number of the account that would like to withdraw
+     * @param amount the amount the user would like to withdraw
+     * @return true if successful, false otherwise
+     */
+    public boolean withdraw(AccountNumber number, double amount) {
+        for(int i = 0; i < size; i ++){
+            if (accounts[i].getNumber() == number){
+                return accounts[i].withdraw(amount) == 1; //Successful withdrawal
+            }
+        }
+        return false; // account not found or unsuccessful withdrawal
+    }
+
+    /**
+     * Find the account that would like to deposit money and call the deposit method created in Account()
+     * @param number the account number of the account that would like to deposit
+     * @param amount the amount the user would like to deposit
+     */
+    public void deposit(AccountNumber number, double amount) {
+        for(int i = 0; i < size; i ++){
+            if (accounts[i].getNumber() == number){
+                accounts[i].deposit(amount);
+                break;
+            }
+        }
+    }
+
+    public void printArchive() {} //print closed accounts
     public void printByBranch() {}
     public void printByHolder() {}
     public void printByType() {}

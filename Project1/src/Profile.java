@@ -55,7 +55,7 @@ public class Profile implements Comparable<Profile> {
     }
 
     @Override
-    public int compareTo(){
+    public int compareTo(Profile profile){
         //What are we comparing?
     }
 
