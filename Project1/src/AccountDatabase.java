@@ -35,7 +35,9 @@ public class AccountDatabase {
      */
     private void grow() {
         Account[] newAccounts = new Account[accounts.length + capacity];
-        System.arraycopy(accounts, 0, newAccounts, 0, accounts.length); //Intellij auto suggest arraycopy()
+        for(int i = 0; i < accounts.length; i++) {
+            newAccounts[i] = accounts[i];
+        }
         accounts = newAccounts;
     }
 
