@@ -4,6 +4,7 @@ public class AccountDatabase {
     private Archive archive; //a linked list of closed account
 
     private static final int capacity = 4;
+    private static final int NOT_FOUND = -1;
 
     /**
      * Constructor to initialize the accounts array with the fixed capacity length, the size to 0, and the archive as a new archive object
@@ -25,7 +26,7 @@ public class AccountDatabase {
                 return i;
             }
         }
-        return -1;
+        return NOT_FOUND;
     }
 
 
@@ -44,7 +45,7 @@ public class AccountDatabase {
      * @return true if found, false otherwise
      */
     public boolean contains(Account account) {
-        return find(account) != -1;
+        return find(account) != NOT_FOUND;
     }
 
     /**
