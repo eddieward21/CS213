@@ -15,9 +15,28 @@ public enum Branch {
         this.county = county;
     }
 
+    public String getZip() {
+        return zip;
+    }
+    public String getBranchCode() {
+        return branchCode;
+    }
+    public String getCounty() {
+        return county;
+    }
 
+
+    public static void testBranch() {
+        System.out.println("testBranch(): ");
+
+        Branch testBranch = Branch.EDISON;
+        System.out.println("Testing EDISON: ");
+        System.out.println("Zip: " + testBranch.getZip());
+        System.out.println("Branch Code: " + testBranch.getBranchCode());
+        System.out.println("County: " + testBranch.getCounty());
+    }
 
     public static void main(String[] args) {
-
+        testBranch();
     }
 }
