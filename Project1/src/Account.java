@@ -18,6 +18,7 @@ public class Account implements Comparable<Account> {
     }
 
 
+
     /**
      * To withdraw money from the account
      * @param amount the user would like to withdraw
@@ -59,38 +60,28 @@ public class Account implements Comparable<Account> {
     }
 
 
-    //Account#[200017410] Holder[John Doe 2/19/2000] Balance[$600.00] Branch [BRIDGEWATER]
     @Override
     public String toString(){
-        return "Account*[" + this.number.getNumber() + "] Holder[" + this.holder.toString() + "] Balance[" + this.balance + "] Branch [" + this.number.getBranch() + "]";
-    } //Must implement getBranch()!!!
+        return "Account*[" + this.number.getNumber() + "] Holder[" + this.holder.toString() + "] Balance[$" + this.balance + "] Branch [" + this.number.getBranch() + "]";
+    }
 
 
 
     @Override
     public int compareTo(Account account) {
-        //Ask in class
+        return Integer.compare(Integer.parseInt(this.number.getNumber()), account.getNumber());
     }
 
     /**
      * A getter method to get the users account number
      * @return the users acount number
      */
-    public AccountNumber getNumber() {
-        return number.getNumber(); //Method not implemented yet!!!
+    public int getNumber() {
+        return Integer.parseInt(number.getNumber());
     }
 
-    /**
-     * A getter method to get the account holders name and dob
-     * @return the account holders name and dob
-     */
-    public Profile getHolder() {
-        String fname = this.holder.getFName();
-        String lname = this.holder.getLName();
-        String dob = this.holder.getDOB(); //Method not implemented yet!!!
-        // What should I return? String?
-        return holder;
-    }
+
+
 
     /**
      * A getter method to get the accounts balance
@@ -100,7 +91,14 @@ public class Account implements Comparable<Account> {
         return balance;
     }
 
+    public AccountNumber getAccountNumber(){
+        return this.number;
+    }
 
 
+    public static void main(String[] args) {
+
+
+    }
 
 }

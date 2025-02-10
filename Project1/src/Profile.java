@@ -1,3 +1,9 @@
+/**
+ * This class represents a Profile with a first name, last name, and date of birth.
+ * It implements the Comparable interface to allow profile comparisons.
+ *
+ * @author George Seriani
+ */
 public class Profile implements Comparable<Profile> {
     private String fname;
     private String lname;
@@ -41,7 +47,7 @@ public class Profile implements Comparable<Profile> {
 
     @Override
     public String toString(){
-        return fname + lname + dob.toString(); // Must be implemented?
+        return fname + " " + lname + " " + dob.toString(); // Must be implemented?
     }
 
     @Override
@@ -56,7 +62,17 @@ public class Profile implements Comparable<Profile> {
 
     @Override
     public int compareTo(Profile profile){
-        //What are we comparing?
+        int lnameComp = this.lname.compareTo(profile.lname);
+        if (lnameComp != 0) {
+            return lnameComp;
+        }
+
+        int fnamComp = this.fname.compareTo(profile.fname);
+        if (fnamComp != 0) {
+            return fnamComp;
+        }
+
+        return this.dob.compareTo(profile.dob);
     }
 
 

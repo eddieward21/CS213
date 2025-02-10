@@ -1,16 +1,22 @@
+/**
+ * This class represents an Account Database that manages accounts.
+ * It includes functionalities to add, remove, and search the database.
+ *
+ * @author George Seriani
+ */
 public class AccountDatabase {
     private Account [] accounts;
     private int size;
     private Archive archive; //a linked list of closed account
 
-    private static final int capacity = 4;
+    private static final int CAPACITY = 4;
     private static final int NOT_FOUND = -1;
 
     /**
      * Constructor to initialize the accounts array with the fixed capacity length, the size to 0, and the archive as a new archive object
      */
     public AccountDatabase() {
-        this.accounts = new Account[capacity];
+        this.accounts = new Account[CAPACITY];
         this.size = 0;
         this.archive = new Archive();
     }
@@ -30,11 +36,12 @@ public class AccountDatabase {
     }
 
 
+
     /**
      * Increasing the size of the database another fixed capacity length, 4
      */
     private void grow() {
-        Account[] newAccounts = new Account[accounts.length + capacity];
+        Account[] newAccounts = new Account[accounts.length + CAPACITY];
         for(int i = 0; i < accounts.length; i++) {
             newAccounts[i] = accounts[i];
         }
@@ -54,14 +61,15 @@ public class AccountDatabase {
      * Add an account to the database, only if it doesn't already exist in the account
      * @param account the account we would like to add
      */
-    public void add(Account account) {
+    public boolean add(Account account) {
         if(contains(account)){
-            return;
+            return false;
         }
         if(accounts.length == size){
             grow();
         }
         accounts[size++] = account;
+        return true;
     }
 
     /**
@@ -74,7 +82,7 @@ public class AccountDatabase {
             accounts[idx] = accounts[size-1];
             accounts[size-1] = null;
             size -= 1;
-            //Must add to archive
+            archive.add(account); //Must add to archive
         }
     }//replace it with the last item
 
@@ -86,7 +94,7 @@ public class AccountDatabase {
      */
     public boolean withdraw(AccountNumber number, double amount) {
         for(int i = 0; i < size; i ++){
-            if (accounts[i].getNumber() == number){
+            if (accounts[i].getAccountNumber() == number){
                 return accounts[i].withdraw(amount) == 1; //Successful withdrawal
             }
         }
@@ -99,18 +107,39 @@ public class AccountDatabase {
      * @param amount the amount the user would like to deposit
      */
     public void deposit(AccountNumber number, double amount) {
+
         for(int i = 0; i < size; i ++){
-            if (accounts[i].getNumber() == number){
+            if (accounts[i].getAccountNumber() == number){
                 accounts[i].deposit(amount);
                 break;
             }
         }
     }
 
-    public void printArchive() {} //print closed accounts
-    public void printByBranch() {}
+    public void printArchive() {
+        archive.printLL();
+    } //print closed accounts
+
+    public void printByBranch() {
+
+
+    }
     public void printByHolder() {}
     public void printByType() {}
+
+    public int getSize(){
+        return this.size;
+    }
+
+    public Account[] getAccounts(){
+        return accounts;
+    }
+
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+
 
 
 

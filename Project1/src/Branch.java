@@ -45,25 +45,47 @@ public enum Branch {
         return county;
     }
 
+    @Override
+    public String toString(){
+        return this.county;
+    }
+
 
     /**
      * Matching the Branch code to the correct branch
      * @param branchCode the branch code of the current account
      * @return the branch name of the branch code we are searching
      */
-    public static Branch getBranchByCode(String branchCode) {
+    public static String getBranchByCode(String branchCode) {
         Branch[] branches = Branch.values();
         for (Branch branch : branches) {
             if (branch.getBranchCode().equals(branchCode)) {
-                return branch;
+                return branch.toString();
             }
         }
         return null;
     }
 
+    public static Branch getBranchByName(String branchName) {
+        try {
+            return Branch.valueOf(branchName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 
+
+    public static void testBranch() {
+        System.out.println("testBranch(): ");
+
+        Branch testBranch = Branch.EDISON;
+        System.out.println("Testing EDISON: ");
+        System.out.println("Zip: " + testBranch.getZip());
+        System.out.println("Branch Code: " + testBranch.getBranchCode());
+        System.out.println("County: " + testBranch.getCounty());
+    }
 
     public static void main(String[] args) {
-
+        testBranch();
     }
 }
