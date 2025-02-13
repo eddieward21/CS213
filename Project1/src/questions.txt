@@ -1,0 +1,13 @@
+Account Class
+- What are we comparing to in the Override method of compareTo()
+- How should we handle invalid withdrawals and deposits if we can not print to the terminal?
+
+Branch Class
+- Done
+
+Profile Class
+- What are we comparing to in the Override method of compareTo()
+
+AccountDatabase Class
+
+TransactionManager Class
