@@ -11,10 +11,8 @@ public class TransactionManager {
     }
 
 
-    private static int moneyMarketValid(String[] tokens){
-        String balance = tokens[6];
+    private static int moneyMarketValid(String balance){
         if(Integer.parseInt(balance) < 2500){
-            System.out.println("Minimum of $2,000 to open a Money Market account.");
             return 0;
         }
         return 1;
@@ -37,6 +35,13 @@ public class TransactionManager {
         String lname = tokens[4];
         String balance = tokens[6];
 
+        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
+            if(moneyMarketValid(balance) == 0){
+                System.out.println("Minimum of $2,000 to open a Money Market account.");
+                return;
+            }
+        }
+
         Branch branch = getBranch(branchStr);
         if (branch == null) return;  // Exit if invalid branch.
 
@@ -47,16 +52,25 @@ public class TransactionManager {
             return;
         }
 
-
         Date date = createDate(tokens);
 
-        if (!date.isValid()) {
-            System.out.println("Invalid DOB!!!");
+        if(!date.isValid()){
+            System.out.println("DOB invalid: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " - not a valid calendar date!");
+            return;
+        }
+        if(!date.isFutureDateValid()){
+            System.out.println("DOB invalid: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " cannot be today or a future day.");
+            return;
+        }
+        if(!date.isLegalAgeValid()){
+            System.out.println("Not eligible to open: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " under 18!");
             return;
         }
 
-        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Profile profile = new Profile(fname, lname, date);
+        if(accountDatabase.lookUp(profile, accountType) != -1) return;
+
+        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Account account = new Account(accountNumber, profile, Integer.parseInt(balance));
 
         if (accountDatabase.add(account)) {
@@ -75,7 +89,6 @@ public class TransactionManager {
                 System.out.println("Initial deposit cannot be 0 or negative.");
             }
         } catch (NumberFormatException e) {
-            // Handle the case where balance is not a valid integer
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
         return 0;
@@ -115,38 +128,83 @@ public class TransactionManager {
         }
     }
 
+
+
+
+    private int validDeposit(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println(balance + " - deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            // Handle the case where balance is not a valid integer
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
+    }
+
     private void depositAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
 
-        Account[] accounts = accountDatabase.getAccounts();
-        for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
-                AccountNumber accountNumber = accounts[i].getAccountNumber();
-                accountDatabase.deposit(accountNumber, Integer.parseInt(amount));
-                break;
+        if(validDeposit(amount) == 1) {
+            Account[] accounts = accountDatabase.getAccounts();
+            for (int i = 0; i < accountDatabase.getSize(); i++) {
+                if (accounts[i].getAccountNumberStr().equals(accountNumberStr)) {
+                    AccountNumber accountNumber = accounts[i].getAccountNumber();
+                    accountDatabase.deposit(accountNumber, Integer.parseInt(amount));
+                    System.out.println("$" + amount + " deposited to " + accountNumberStr + ".");
+                    break;
+                }
             }
         }
 
     }
 
+    private int validWithdrawl(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println(balance + " - deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            // Handle the case where balance is not a valid integer
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
+    }
+
     private void withdrawAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
+        String accountTypeStr = accountNumberStr.substring(3,5);
 
-
-
-        Account[] accounts = accountDatabase.getAccounts();
-        for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
-                AccountNumber accountNumber = accounts[i].getAccountNumber();
-                if(accountDatabase.withdraw(accountNumber, Integer.parseInt(amount))){
-                    System.out.println("$" + amount + " withdrawn from " + accountNumberStr + ".");
-                };
-                break;
+        if(validWithdrawl(amount) == 1){
+            Account[] accounts = accountDatabase.getAccounts();
+            for(int i = 0; i < accountDatabase.getSize(); i++) {
+                if (accounts[i].getAccountNumberStr().equals(accountNumberStr)) {
+                    AccountNumber accountNumber = accounts[i].getAccountNumber();
+                    if (accountDatabase.withdraw(accountNumber, Integer.parseInt(amount))) {
+                        if (accountTypeStr.equals("03") && accounts[i].getBalance() < 2000) {
+                            accounts[i].downgrade();
+                            System.out.println(accountNumberStr + " is downgraded to SAVINGS - $" + amount + " withdrawn from " + accountNumberStr);
+                        } else {
+                            System.out.println("$" + amount + " withdrawn from " + accountNumberStr + ".");
+                        }
+                    }
+                    else{
+                        System.out.println(accountNumberStr + " - insufficient funds.");
+                    }
+                    return;
+                }
             }
+            System.out.println(accountNumberStr + " does not exist.");
         }
-
     }
 
 

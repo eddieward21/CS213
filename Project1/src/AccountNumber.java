@@ -17,8 +17,8 @@ public class AccountNumber implements Comparable<AccountNumber> {
 
     // Generate a 4-digit random number based on a seed
     private String generateRandomDigits() {
-        int randomNumber = random.nextInt(9000) + 1000;
-        return String.valueOf(randomNumber);
+        int randomNumber = random.nextInt(9999);
+        return String.format("%04d", randomNumber);
     }
 
     // Override equals() for object comparison
@@ -62,6 +62,10 @@ public class AccountNumber implements Comparable<AccountNumber> {
         return type.getCode();  // Call getCode() method of AccountType enum
     }
 
+    public void downgradeToSavings(){
+        this.type = AccountType.SAVINGS;
+    }
+
     // Implement compareTo() for sorting
     @Override
     public int compareTo(AccountNumber other) {
@@ -75,9 +79,12 @@ public class AccountNumber implements Comparable<AccountNumber> {
 
         AccountNumber acc1 = new AccountNumber(princeton, checking);
         AccountNumber acc2 = new AccountNumber(princeton, checking);
+        AccountNumber acc3 = new AccountNumber(princeton, checking);
+
 
         System.out.println("Account 1: " + acc1);
         System.out.println("Account 2: " + acc2);
+        System.out.println("Account 3: " + acc3);
         System.out.println("Equal? " + acc1.equals(acc2));
         System.out.println("Comparison: " + acc1.compareTo(acc2));
     }

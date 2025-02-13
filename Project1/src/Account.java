@@ -18,6 +18,10 @@ public class Account implements Comparable<Account> {
     }
 
 
+    public void downgrade(){
+        this.number.downgradeToSavings();
+    }
+
 
     /**
      * To withdraw money from the account
@@ -101,6 +105,14 @@ public class Account implements Comparable<Account> {
 
     public String getAccountNumberStr(){
         return this.number.getAccountNumber();
+    }
+
+    public Profile getHolder(){
+        return this.holder;
+    }
+
+    public AccountType getAccountType(){
+        return this.number.getType();
     }
 
     public static void main(String[] args) {

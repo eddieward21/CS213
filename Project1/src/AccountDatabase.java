@@ -35,6 +35,15 @@ public class AccountDatabase {
         return NOT_FOUND;
     }
 
+    public int lookUp(Profile profile, AccountType accountType){
+        for(int i = 0; i < size; i++){
+            if (accounts[i].getHolder().equals(profile) && accounts[i].getAccountType().equals(accountType)) {
+                return i;
+            }
+        }
+        return NOT_FOUND;
+    }
+
 
 
     /**
