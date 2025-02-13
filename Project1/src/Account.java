@@ -25,7 +25,7 @@ public class Account implements Comparable<Account> {
      * @return 1 if deposit was valid, 0 if not valid
      */
     public int withdraw(double amount) {
-        if (amount > 0 && amount >= balance){
+        if (amount > 0 && amount <= balance){
             balance -= amount; // Done in the database?
             return 1;
         }
@@ -66,7 +66,7 @@ public class Account implements Comparable<Account> {
 
     @Override
     public String toString(){
-        return "Account*[" + this.number.getNumber() + "] Holder[" + this.holder.toString() + "] Balance[$" + this.balance + "] Branch [" + this.number.getBranch() + "]";
+        return "Account*[" + this.number.getAccountNumber() + "] Holder[" + this.holder.toString() + "] Balance[$" + this.balance + "] Branch [" + this.number.getBranch() + "]";
     }
 
 
@@ -99,6 +99,9 @@ public class Account implements Comparable<Account> {
         return this.number;
     }
 
+    public String getAccountNumberStr(){
+        return this.number.getAccountNumber();
+    }
 
     public static void main(String[] args) {
 

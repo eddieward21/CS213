@@ -98,7 +98,7 @@ public class AccountDatabase {
                 return accounts[i].withdraw(amount) == 1; //Successful withdrawal
             }
         }
-        return false; // account not found or unsuccessful withdrawal
+        return false; // unsuccessful withdrawal
     }
 
     /**

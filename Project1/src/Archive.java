@@ -24,11 +24,12 @@ public class Archive {
             return;
         }
 
-        System.out.println("printLL(): ");
+
         while (current != null) {
             System.out.println(current.account);
             current = current.next;
         }
+
     }
 
 

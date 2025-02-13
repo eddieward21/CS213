@@ -43,7 +43,11 @@ public class TransactionManager {
         AccountType accountType = getAccountType(accountTypeStr);
         if (accountType == null) return;  // Exit if invalid account type.
 
-        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
+        if(validInitialDeposit(balance) != 1){
+            return;
+        }
+
+
         Date date = createDate(tokens);
 
         if (!date.isValid()) {
@@ -51,14 +55,30 @@ public class TransactionManager {
             return;
         }
 
+        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Profile profile = new Profile(fname, lname, date);
         Account account = new Account(accountNumber, profile, Integer.parseInt(balance));
 
         if (accountDatabase.add(account)) {
-            System.out.println(accountTypeStr.toUpperCase() + " account " + account.getNumber() + " has been opened.");
+            System.out.println(accountTypeStr.toUpperCase() + " account " + account.getAccountNumberStr() + " has been opened.");
         } else {
             System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
         }
+    }
+
+    private int validInitialDeposit(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println("Initial deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            // Handle the case where balance is not a valid integer
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
     }
 
     private Branch getBranch(String branchStr) {
@@ -80,15 +100,15 @@ public class TransactionManager {
     private AccountNumber generateAccountNumber(Branch branch, AccountType accountType) {
         String branchCode = branch.getBranchCode();
         String accountCode = accountType.getCode();
-        return new AccountNumber(branch, accountType, branchCode + accountCode);
+        return new AccountNumber(branch, accountType);
     }
 
     private void closeAccount(String[] tokens){
-        String accountNumber = tokens[1];
+        String accountNumberStr = tokens[1];
 
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumber)){
+            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
                 accountDatabase.remove(accounts[i]);
                 break;
             }
@@ -101,7 +121,7 @@ public class TransactionManager {
 
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumberStr)){
+            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
                 AccountNumber accountNumber = accounts[i].getAccountNumber();
                 accountDatabase.deposit(accountNumber, Integer.parseInt(amount));
                 break;
@@ -114,11 +134,15 @@ public class TransactionManager {
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
 
+
+
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumberStr)){
+            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
                 AccountNumber accountNumber = accounts[i].getAccountNumber();
-                accountDatabase.withdraw(accountNumber, Integer.parseInt(amount));
+                if(accountDatabase.withdraw(accountNumber, Integer.parseInt(amount))){
+                    System.out.println("$" + amount + " withdrawn from " + accountNumberStr + ".");
+                };
                 break;
             }
         }
@@ -160,7 +184,9 @@ public class TransactionManager {
                 printDatabase();
                 break;
             case "PA":
+                System.out.println("*List of closed accounts in the archive.");
                 accountDatabase.printArchive();
+                System.out.println("*end of list.");
                 break;
             case "PB":
                 accountDatabase.printByBranch();
