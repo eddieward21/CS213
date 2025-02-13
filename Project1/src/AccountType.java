@@ -2,6 +2,8 @@ public enum AccountType {
     CHECKING("01"),
     SAVINGS("02"),
     MONEYMARKET("03");
+    REGULARSAVINGS("02"),
+    MONEYMARKETSAVINGS("03");
 
     private final String code;
 
@@ -34,6 +36,19 @@ public enum AccountType {
 
     public static void main(String[] args) {
 
+    }
+
+}
+    public static void testAccountType () {
+        System.out.println("testAccountType()... ");
+
+        System.out.println("Testing 01: ");
+        AccountType type1 = AccountType.accountTypeFromCode("01");
+        System.out.println(type1);
+    }
+
+    public static void main(String[] args) {
+        testAccountType();
     }
 
 }
