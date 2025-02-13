@@ -54,7 +54,11 @@ public class Account implements Comparable<Account> {
     public boolean equals(Object obj){
         if(obj instanceof Account){
             Account account = (Account) obj;
-            return account.number.equals(this.number);
+
+            boolean profileComp = account.holder.equals(this.holder);
+            if(profileComp){
+                return account.number.getAccountTypeCode().equals(this.number.getAccountTypeCode());
+            }
         }
         return false;
     }

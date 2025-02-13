@@ -82,9 +82,9 @@ public class AccountDatabase {
             accounts[idx] = accounts[size-1];
             accounts[size-1] = null;
             size -= 1;
-            archive.add(account); //Must add to archive
+            archive.add(account);
         }
-    }//replace it with the last item
+    }
 
     /**
      * Find the account that would like to withdraw money and call the withdrawal method created in Account()
@@ -118,7 +118,7 @@ public class AccountDatabase {
 
     public void printArchive() {
         archive.printLL();
-    } //print closed accounts
+    }
 
     public void printByBranch() {
 

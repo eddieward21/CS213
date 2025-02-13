@@ -1,3 +1,10 @@
+/**
+ * Enum represents different branches of the bank.
+ * Contains information such as the branch's zipcode, branch code, and county.
+ * The enum also includes methods to retrieve branch information by branch code or branch name.
+ *
+ * @author George Seriani
+ */
 public enum Branch {
     EDISON("08817", "100", "Middlesex"),
     BRIDGEWATER("08807", "200", "Somerset"),
@@ -45,10 +52,7 @@ public enum Branch {
         return county;
     }
 
-    @Override
-    public String toString(){
-        return this.county;
-    }
+
 
 
     /**
@@ -66,6 +70,11 @@ public enum Branch {
         return null;
     }
 
+    /**
+     * Getting the Branch name given the String
+     * @param branchName the String literal of the Brnch name
+     * @return The Branch name
+     */
     public static Branch getBranchByName(String branchName) {
         try {
             return Branch.valueOf(branchName.toUpperCase());
@@ -75,17 +84,8 @@ public enum Branch {
     }
 
 
-    public static void testBranch() {
-        System.out.println("testBranch(): ");
-
-        Branch testBranch = Branch.EDISON;
-        System.out.println("Testing EDISON: ");
-        System.out.println("Zip: " + testBranch.getZip());
-        System.out.println("Branch Code: " + testBranch.getBranchCode());
-        System.out.println("County: " + testBranch.getCounty());
-    }
 
     public static void main(String[] args) {
-        testBranch();
+
     }
 }

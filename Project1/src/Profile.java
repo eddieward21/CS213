@@ -54,22 +54,21 @@ public class Profile implements Comparable<Profile> {
     public boolean equals(Object obj){
         if(obj instanceof Profile){
             Profile person = (Profile) obj;
-            String personDOB = dob.toString();
-            return person.fname.equals(this.fname) && person.lname.equals(this.lname) && personDOB.equals(this.dob.toString());
+            return person.fname.toLowerCase().equals(this.fname.toLowerCase()) && person.lname.toLowerCase().equals(this.lname.toLowerCase()) && person.dob.equals(this.dob);
         }
         return false;
     }
 
     @Override
-    public int compareTo(Profile profile){
+    public int compareTo(Profile profile) {
         int lnameComp = this.lname.compareTo(profile.lname);
         if (lnameComp != 0) {
             return lnameComp;
         }
 
-        int fnamComp = this.fname.compareTo(profile.fname);
-        if (fnamComp != 0) {
-            return fnamComp;
+        int fnameComp = this.fname.compareTo(profile.fname);
+        if (fnameComp != 0) {
+            return fnameComp;
         }
 
         return this.dob.compareTo(profile.dob);
@@ -77,8 +76,35 @@ public class Profile implements Comparable<Profile> {
 
 
 
+
     public static void main(String[] args) {
         //Need testbed for compare functions
+        Date date1 = new Date(2000, 1, 1);
+        Date date2 = new Date(1999, 10, 25);
+        Date date3 = new Date(2000, 1, 1);
+
+        Profile p1 = new Profile("John", "Doe", date1);
+        Profile p2 = new Profile("Alice", "Smith", date2);
+        Profile p3 = new Profile("John", "Doe", date3);
+
+        // Testing toString()
+        System.out.println("Testing toString():");
+        System.out.println("p1: " + p1.toString());
+        System.out.println("p2: " + p2.toString());
+        System.out.println("p3: " + p3.toString());
+
+        // Testing equals()
+        System.out.println("\nTesting equals():");
+        System.out.println("p1.equals(p2): " + p1.equals(p2));
+        System.out.println("p1.equals(p3): " + p1.equals(p3));
+
+        // Testing compareTo()
+        System.out.println("\nTesting compareTo():");
+        System.out.println("p1.compareTo(p2): " + p1.compareTo(p2)); // Expected: positive (Doe > Smith)
+        System.out.println("p2.compareTo(p1): " + p2.compareTo(p1)); // Expected: negative (Smith < Doe)
+        System.out.println("p1.compareTo(p3): " + p1.compareTo(p3)); // Expected: 0
+
+        System.out.println("\nAll tests completed.");
 
     }
 }

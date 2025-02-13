@@ -1,7 +1,7 @@
 public enum AccountType {
     CHECKING("01"),
-    REGULARSAVINGS("02"),
-    MONEYMARKETSAVINGS("03");
+    SAVINGS("02"),
+    MONEYMARKET("03");
 
     private final String code;
 
@@ -26,7 +26,7 @@ public enum AccountType {
         try {
             return AccountType.valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid account type name: " + name);
+            return null;
         }
     }
 

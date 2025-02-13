@@ -11,13 +11,14 @@ public class AccountNumber implements Comparable<AccountNumber> {
     public AccountNumber(Branch branch, AccountType type, String number) {
         this.branch = branch;
         this.type = type;
-        this.number = number;
+        this.number = number + generateRandomDigits();
     }
 
     // Generate a 4-digit random number based on a seed
-    public int generateRandomNumber(int seed) {
-        Random random = new Random(seed);
-        return 1000 + random.nextInt(9000);  // Fixed: Corrected nextInt()
+    private String generateRandomDigits() {
+        Random random = new Random(SEED);
+        int randomNumber = random.nextInt(9000) + 1000;
+        return String.valueOf(randomNumber);
     }
 
     // Override equals() for object comparison
@@ -42,13 +43,19 @@ public class AccountNumber implements Comparable<AccountNumber> {
     }
 
     public String getBranch(){
-        String branchCode = this.number.substring(0, 3);
-        System.out.println(branch.getBranchByCode(branchCode));
-        return branch.getBranchByCode(branchCode);
+        return Branch.getBranchByCode(this.number.substring(0, 3));
     }
 
     public String getNumber(){
         return this.number;
+    }
+
+    public AccountType getType(){
+        return this.type;
+    }
+
+    public String getAccountTypeCode() {
+        return type.getCode();  // Call getCode() method of AccountType enum
     }
 
     // Implement compareTo() for sorting
