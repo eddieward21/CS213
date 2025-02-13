@@ -33,5 +33,5 @@ public enum AccountType {
     public static void main(String[] args) {
         testAccountType();
     }
-
+    testAccountType();
 }
