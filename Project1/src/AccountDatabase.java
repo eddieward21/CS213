@@ -85,14 +85,17 @@ public class AccountDatabase {
      * Remove an account if it exists in the database, and add to the archive
      * @param account the account we want to remove
      */
-    public void remove(Account account) {
+    public boolean remove(Account account) {
         if(contains(account)){
             int idx = find(account);
+            accounts[idx].updateBalanceClosedAccount();
             accounts[idx] = accounts[size-1];
             accounts[size-1] = null;
             size -= 1;
             archive.add(account);
+            return true;
         }
+        return false;
     }
 
     /**

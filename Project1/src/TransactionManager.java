@@ -18,8 +18,7 @@ public class TransactionManager {
         return 1;
     }
 
-    private static Date createDate(String[] tokens){
-        String dob = tokens[5];
+    private static Date createDate(String dob){
         String[] parts = dob.split("/");
         int month = Integer.parseInt(parts[0]);
         int day = Integer.parseInt(parts[1]);
@@ -34,6 +33,7 @@ public class TransactionManager {
         String fname = tokens[3];
         String lname = tokens[4];
         String balance = tokens[6];
+        String dob = tokens[5];
 
         if(accountTypeStr.equalsIgnoreCase("moneymarket")){
             if(moneyMarketValid(balance) == 0){
@@ -52,7 +52,7 @@ public class TransactionManager {
             return;
         }
 
-        Date date = createDate(tokens);
+        Date date = createDate(dob);
 
         if(!date.isValid()){
             System.out.println("DOB invalid: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " - not a valid calendar date!");
@@ -123,9 +123,36 @@ public class TransactionManager {
         for(int i = 0; i < accountDatabase.getSize(); i++){
             if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
                 accountDatabase.remove(accounts[i]);
-                break;
+                System.out.println(accountNumberStr + " is closed and moved to archive; balance set to 0.");
+                return;
             }
         }
+        System.out.println(accountNumberStr + " account does not exist.");
+    }
+
+    private void closeAllHolderAccounts(String[] tokens){
+        String fname = tokens[1];
+        String lname = tokens[2];
+        String dob = tokens[3];
+        Date date = createDate(dob);
+        Profile profile = new Profile(fname, lname, date);
+
+        boolean successful = false;
+
+        Account[] accounts = accountDatabase.getAccounts();
+        for(int i = 0; i < accountDatabase.getSize(); i++){
+            if(accounts[i].getHolder().equals(profile)){
+                accountDatabase.remove(accounts[i]);
+                successful = true;
+            }
+        }
+
+        if(successful){
+            System.out.println("All accounts for " + fname + " " + lname + " " + dob + " are closed and moved to archive; balance set to 0.");
+            return;
+        }
+        System.out.println(fname + " " + lname + " " + dob + " does not have any accounts in the database.");
+
     }
 
 
@@ -230,7 +257,12 @@ public class TransactionManager {
                 openAccount(tokens);
                 break;
             case "C":
-                closeAccount(tokens);
+                if(tokens.length > 2){
+                    closeAllHolderAccounts(tokens);
+                }
+                else {
+                    closeAccount(tokens);
+                }
                 break;
             case "D":
                 depositAccount(tokens);

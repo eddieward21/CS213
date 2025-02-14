@@ -99,6 +99,10 @@ public class Account implements Comparable<Account> {
         return balance;
     }
 
+    public void updateBalanceClosedAccount(){
+        this.balance = 0;
+    }
+
     public AccountNumber getAccountNumber(){
         return this.number;
     }
