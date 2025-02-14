@@ -35,6 +35,13 @@ public class AccountDatabase {
         return NOT_FOUND;
     }
 
+
+    /**
+     * Check if the Holder already has a account of the type they are trying to open
+     * @param profile the Holders information
+     * @param accountType The account type
+     * @return the index of their account if it exits, and NOT_FOUND otherwise
+     */
     public int lookUp(Profile profile, AccountType accountType){
         for(int i = 0; i < size; i++){
             if (accounts[i].getHolder().equals(profile) && accounts[i].getAccountType().equals(accountType)) {
@@ -128,6 +135,9 @@ public class AccountDatabase {
         }
     }
 
+    /**
+     * Print the Archive database
+     */
     public void printArchive() {
         archive.printLL();
     }
@@ -139,14 +149,26 @@ public class AccountDatabase {
     public void printByHolder() {}
     public void printByType() {}
 
+    /**
+     * Helper Method to get the size of the database
+     * @return size of the database
+     */
     public int getSize(){
         return this.size;
     }
 
+    /**
+     * Helper method to get the accounts of the database
+     * @return the accounts in the database
+     */
     public Account[] getAccounts(){
         return accounts;
     }
 
+    /**
+     * Helper method to check if database is empty
+     * @return true or false
+     */
     public boolean isEmpty(){
         return size == 0;
     }

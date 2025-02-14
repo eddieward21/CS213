@@ -1,3 +1,10 @@
+/**
+ * This class manages various banking transactions such as opening accounts,
+ * making deposits and withdrawals, closing accounts, and printing the account database.
+ * Properly displaying the results to the terminal.
+ *
+ * @author George Seriani
+ */
 import java.util.Scanner;
 
 public class TransactionManager {
@@ -5,12 +12,20 @@ public class TransactionManager {
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
 
+    /**
+     * Create an instance of the account database and the archive
+     */
     public TransactionManager() {
         this.accountDatabase = new AccountDatabase();  // Initialize your AccountDatabase
         this.accountArchive = new Archive();  // Initialize Archive if needed
     }
 
 
+    /**
+     * Method to check if the initial balance is valid for a money market account
+     * @param balance the inital deposit
+     * @return true (1) or false (0)
+     */
     private static int moneyMarketValid(String balance){
         if(Integer.parseInt(balance) < 2500){
             return 0;
@@ -18,6 +33,11 @@ public class TransactionManager {
         return 1;
     }
 
+    /**
+     * Method to create the date instance using the string version
+     * @param dob date as a string
+     * @return an instance of Date
+     */
     private static Date createDate(String dob){
         String[] parts = dob.split("/");
         int month = Integer.parseInt(parts[0]);
@@ -27,6 +47,10 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Method to open an account with the proper validations
+     * @param tokens the information given by the user
+     */
     private void openAccount(String[] tokens){
         String accountTypeStr = tokens[1];
         String branchStr = tokens[2];
@@ -80,6 +104,11 @@ public class TransactionManager {
         }
     }
 
+    /**
+     * Check if the initial deposit is valid
+     * @param balance the initial deposit
+     * @return true (1) or false (0)
+     */
     private int validInitialDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
@@ -94,6 +123,11 @@ public class TransactionManager {
         return 0;
     }
 
+    /**
+     * Get the branch given the string
+     * @param branchStr the branch as a string
+     * @return the branch
+     */
     private Branch getBranch(String branchStr) {
         Branch branch = Branch.getBranchByName(branchStr.toUpperCase());
         if (branch == null) {
@@ -102,6 +136,11 @@ public class TransactionManager {
         return branch;
     }
 
+    /**
+     * Get the accountType given the string
+     * @param accountTypeStr the string of accountType
+     * @return the account type
+     */
     private AccountType getAccountType(String accountTypeStr) {
         AccountType accountType = AccountType.accountTypeFromName(accountTypeStr);
         if (accountType == null) {
@@ -110,12 +149,22 @@ public class TransactionManager {
         return accountType;
     }
 
+    /**
+     * Generate the account number given the branch and account type
+     * @param branch the branch of the account
+     * @param accountType the account type of the account
+     * @return the instance of accountNumber
+     */
     private AccountNumber generateAccountNumber(Branch branch, AccountType accountType) {
         String branchCode = branch.getBranchCode();
         String accountCode = accountType.getCode();
         return new AccountNumber(branch, accountType);
     }
 
+    /**
+     * Close a singular account
+     * @param tokens the account number given by user
+     */
     private void closeAccount(String[] tokens){
         String accountNumberStr = tokens[1];
 
@@ -130,6 +179,10 @@ public class TransactionManager {
         System.out.println(accountNumberStr + " account does not exist.");
     }
 
+    /**
+     * Close all accounts of a specific holder
+     * @param tokens the holders information
+     */
     private void closeAllHolderAccounts(String[] tokens){
         String fname = tokens[1];
         String lname = tokens[2];
@@ -157,7 +210,11 @@ public class TransactionManager {
 
 
 
-
+    /**
+     * Check if the deposit is valid
+     * @param balance the deposit
+     * @return true (1) or false (0)
+     */
     private int validDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
@@ -173,6 +230,10 @@ public class TransactionManager {
         return 0;
     }
 
+    /**
+     * Preform a deposit into the account
+     * @param tokens the information given by the user
+     */
     private void depositAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
@@ -191,6 +252,11 @@ public class TransactionManager {
 
     }
 
+    /**
+     * Check if the withdrawal is valid
+     * @param balance the withdrawal amount
+     * @return true (1) or false (0)
+     */
     private int validWithdrawl(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
@@ -206,6 +272,10 @@ public class TransactionManager {
         return 0;
     }
 
+    /**
+     * Preform a withdrawal from the account
+     * @param tokens the information given by the user
+     */
     private void withdrawAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
@@ -235,6 +305,9 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Print the current active accounts database
+     */
     public void printDatabase(){
         if(accountDatabase.isEmpty()){
             System.out.println("Account database is empty!");
@@ -249,6 +322,10 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Method to handle all input cases
+     * @param command the command given by the user
+     */
     private void inputCommands(String command){
         String[] tokens = command.trim().split("\\s+");
         String action = tokens[0];
@@ -287,17 +364,17 @@ public class TransactionManager {
             case "PT":
                 accountDatabase.printByType();
                 break;
-            case "Q":
-                RUNNING = false;
-                System.out.println("Transaction Manager is terminated.");
-                break;
             default:
                 System.out.println("Invalid command.");
         }
     }
 
 
-
+    /**
+     * Starts the transaction manager, accepting commands from the user.
+     * It keeps running in a loop until the user enters the command 'Q' to quit.
+     * This method also handles processing of different commands entered by the user
+     */
     public void run() {
         System.out.println("Transaction Manager is running.");
         Scanner scanner = new Scanner(System.in);

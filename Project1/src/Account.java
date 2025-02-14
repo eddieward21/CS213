@@ -1,3 +1,10 @@
+/**
+ * Account class represents a bank account with basic functionalities such as
+ * deposit, withdrawal, balance updates, and account management. It implements
+ * the Comparable interface to allow comparison of accounts based on account numbers.
+ *
+ * Author: George Seriani
+ */
 public class Account implements Comparable<Account> {
 
     private AccountNumber number;
@@ -17,7 +24,9 @@ public class Account implements Comparable<Account> {
         this.balance = balance;
     }
 
-
+    /**
+     * Helper method to downgrade from 03 -> 02 account type
+     */
     public void downgrade(){
         this.number.downgradeToSavings();
     }
@@ -99,22 +108,41 @@ public class Account implements Comparable<Account> {
         return balance;
     }
 
+    /**
+     * Make closed account balance $0
+     */
     public void updateBalanceClosedAccount(){
         this.balance = 0;
     }
 
+    /**
+     * Helper method to get the account number
+     * @return the account number
+     */
     public AccountNumber getAccountNumber(){
         return this.number;
     }
 
+    /**
+     * Helper method to get the account number as a string
+     * @return account number as a string
+     */
     public String getAccountNumberStr(){
         return this.number.getAccountNumber();
     }
 
+    /**
+     * Helper method to get the profile of the account
+     * @return the holder of the account
+     */
     public Profile getHolder(){
         return this.holder;
     }
 
+    /**
+     * Helper method to get the account type
+     * @return the account type
+     */
     public AccountType getAccountType(){
         return this.number.getType();
     }
