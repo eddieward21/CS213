@@ -27,12 +27,17 @@ public class Date implements Comparable<Date> {
         if (!isMonthValid()) return false;
         if (!isDayValid()) return false;
         if (!isLeapYearAdjustmentValid()) return false;
+        if (!isFutureDateValid()) return false;
+        if (!isLegalAgeValid()) return false;
+
         return true; // If all checks pass
     }
 
     // ✅ Check if the month is valid (1-12)
     private boolean isMonthValid() {
         if (month < 1 || month > 12) {
+
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Invalid month!");
             return false;
         }
         return true;
@@ -80,6 +85,48 @@ public class Date implements Comparable<Date> {
         LocalDate inputDate = LocalDate.of(year, month, day);
 
         if (ChronoUnit.YEARS.between(inputDate, today) < LEGAL_AGE) {
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Invalid day!");
+            return false;
+        }
+
+        int maxDays = DAYS_IN_MONTH[month];
+
+        if (day > maxDays) {
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Not a valid calendar date!");
+            return false;
+        }
+
+        return true;
+    }
+
+    // ✅ Check if February 29 is correctly handled in leap years
+    private boolean isLeapYearAdjustmentValid() {
+        if (month == 2 && isLeapYear(year) && day > 29) {
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - February has only 29 days in a leap year!");
+            return false;
+        }
+        return true;
+    }
+
+    // ✅ Check if the date is in the future
+    private boolean isFutureDateValid() {
+        LocalDate today = LocalDate.now();
+        LocalDate inputDate = LocalDate.of(year, month, day);
+
+        if (inputDate.isAfter(today)) {
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Cannot be in the future!");
+            return false;
+        }
+        return true;
+    }
+
+    // ✅ Check if the user is at least 18 years old
+    private boolean isLegalAgeValid() {
+        LocalDate today = LocalDate.now();
+        LocalDate inputDate = LocalDate.of(year, month, day);
+
+        if (ChronoUnit.YEARS.between(inputDate, today) < LEGAL_AGE) {
+            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - User is under 18!");
             return false;
         }
         return true;
@@ -131,6 +178,7 @@ public class Date implements Comparable<Date> {
     public int getYear(){
         return this.year;
     }
+
 
     // ✅ Test method for Date class
     public static void testDateClass() {

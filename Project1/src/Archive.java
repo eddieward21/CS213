@@ -40,3 +40,21 @@ public class Archive {
 
 
 }
+
+    public static void testArchive() {
+        System.out.println("testArchive(): ");
+        Archive archive = new Archive();
+
+        Account account1 = new Account("12345", "Eddie Ward", 725);
+
+        archive.add(account1);
+
+        archive.printLL();
+    }
+
+    public static void main(String[] args) {
+        testArchive();
+    }
+
+
+}
