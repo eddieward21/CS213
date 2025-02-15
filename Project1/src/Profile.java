@@ -61,12 +61,12 @@ public class Profile implements Comparable<Profile> {
 
     @Override
     public int compareTo(Profile profile) {
-        int lnameComp = this.lname.compareTo(profile.lname);
+        int lnameComp = this.lname.toLowerCase().compareTo(profile.lname.toLowerCase());
         if (lnameComp != 0) {
             return lnameComp;
         }
 
-        int fnameComp = this.fname.compareTo(profile.fname);
+        int fnameComp = this.fname.toLowerCase().compareTo(profile.fname.toLowerCase());
         if (fnameComp != 0) {
             return fnameComp;
         }

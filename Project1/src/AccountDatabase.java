@@ -146,7 +146,41 @@ public class AccountDatabase {
 
 
     }
-    public void printByHolder() {}
+
+    /**
+     * Selection sort to properly sort the accounts by their profiles, then if they are the same person, their account numbers
+     */
+    public Account[] printByHolder() {
+        Account[] sortedAccounts = new Account[size];
+        for (int i = 0; i < size; i++) {
+            sortedAccounts[i] = accounts[i];
+        }
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                int holderCompare = sortedAccounts[j].getHolder().compareTo(sortedAccounts[minIndex].getHolder());
+
+                if (holderCompare == 0) {
+                    if (sortedAccounts[j].getNumber() < sortedAccounts[minIndex].getNumber()) {
+                        minIndex = j;
+                    }
+                }
+                else if (holderCompare < 0) {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                Account temp = sortedAccounts[i];
+                sortedAccounts[i] = sortedAccounts[minIndex];
+                sortedAccounts[minIndex] = temp;
+            }
+        }
+
+        return sortedAccounts;
+
+    }
+
     public void printByType() {}
 
     /**

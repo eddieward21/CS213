@@ -35,11 +35,7 @@ public class AccountNumber implements Comparable<AccountNumber> {
     // Override toString() for a readable format
     @Override
     public String toString() {
-        return "AccountNumber{" +
-                "branch=" + branch +
-                ", type=" + type +
-                ", number='" + number + '\'' +
-                '}';
+        return this.branch.getBranchCode()+this.type.getCode()+this.number;
     }
 
     public String getBranch(){
@@ -47,7 +43,7 @@ public class AccountNumber implements Comparable<AccountNumber> {
     }
 
     public String getNumber(){
-        return this.number;
+        return this.toString();
     }
 
     public String getAccountNumber(){

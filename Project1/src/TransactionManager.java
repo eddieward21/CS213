@@ -321,6 +321,20 @@ public class TransactionManager {
         System.out.println("*end of list.");
     }
 
+    /**
+     * Printing the database sorted by the account holders
+     */
+    public void printByHolder(){
+        Account[] sorted = accountDatabase.printByHolder();
+        System.out.println("*List of accounts ordered by account holder and number.");
+        for(int i = 0; i < accountDatabase.getSize(); i++){
+            System.out.println(sorted[i].toString());
+        }
+        System.out.println("*end of list.");
+    }
+
+
+
 
     /**
      * Method to handle all input cases
@@ -351,15 +365,13 @@ public class TransactionManager {
                 printDatabase();
                 break;
             case "PA":
-                System.out.println("*List of closed accounts in the archive.");
                 accountDatabase.printArchive();
-                System.out.println("*end of list.");
                 break;
             case "PB":
                 accountDatabase.printByBranch();
                 break;
             case "PH":
-                accountDatabase.printByHolder();
+                printByHolder();
                 break;
             case "PT":
                 accountDatabase.printByType();

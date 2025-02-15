@@ -17,10 +17,11 @@ public class Archive {
         first = newNode;
     }
 
+
     public void printLL() {
         AccountNode current = first;
         if (current == null) {
-            System.out.println("empty.");
+            System.out.println("No Accounts in the Archive.");
             return;
         }
 
