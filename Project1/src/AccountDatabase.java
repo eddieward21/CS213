@@ -36,6 +36,22 @@ public class AccountDatabase {
     }
 
 
+    /**
+     * Check if the Holder already has a account of the type they are trying to open
+     * @param profile the Holders information
+     * @param accountType The account type
+     * @return the index of their account if it exits, and NOT_FOUND otherwise
+     */
+    public int lookUp(Profile profile, AccountType accountType){
+        for(int i = 0; i < size; i++){
+            if (accounts[i].getHolder().equals(profile) && accounts[i].getAccountType().equals(accountType)) {
+                return i;
+            }
+        }
+        return NOT_FOUND;
+    }
+
+
 
     /**
      * Increasing the size of the database another fixed capacity length, 4
@@ -76,14 +92,17 @@ public class AccountDatabase {
      * Remove an account if it exists in the database, and add to the archive
      * @param account the account we want to remove
      */
-    public void remove(Account account) {
+    public boolean remove(Account account) {
         if(contains(account)){
             int idx = find(account);
+            accounts[idx].updateBalanceClosedAccount();
             accounts[idx] = accounts[size-1];
             accounts[size-1] = null;
             size -= 1;
             archive.add(account);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -98,7 +117,7 @@ public class AccountDatabase {
                 return accounts[i].withdraw(amount) == 1; //Successful withdrawal
             }
         }
-        return false; // account not found or unsuccessful withdrawal
+        return false; // unsuccessful withdrawal
     }
 
     /**
@@ -116,6 +135,9 @@ public class AccountDatabase {
         }
     }
 
+    /**
+     * Print the Archive database
+     */
     public void printArchive() {
         archive.printLL();
     }
@@ -127,14 +149,26 @@ public class AccountDatabase {
     public void printByHolder() {}
     public void printByType() {}
 
+    /**
+     * Helper Method to get the size of the database
+     * @return size of the database
+     */
     public int getSize(){
         return this.size;
     }
 
+    /**
+     * Helper method to get the accounts of the database
+     * @return the accounts in the database
+     */
     public Account[] getAccounts(){
         return accounts;
     }
 
+    /**
+     * Helper method to check if database is empty
+     * @return true or false
+     */
     public boolean isEmpty(){
         return size == 0;
     }

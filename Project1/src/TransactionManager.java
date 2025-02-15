@@ -1,3 +1,10 @@
+/**
+ * This class manages various banking transactions such as opening accounts,
+ * making deposits and withdrawals, closing accounts, and printing the account database.
+ * Properly displaying the results to the terminal.
+ *
+ * @author George Seriani
+ */
 import java.util.Scanner;
 
 public class TransactionManager {
@@ -5,23 +12,33 @@ public class TransactionManager {
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
 
+    /**
+     * Create an instance of the account database and the archive
+     */
     public TransactionManager() {
         this.accountDatabase = new AccountDatabase();  // Initialize your AccountDatabase
         this.accountArchive = new Archive();  // Initialize Archive if needed
     }
 
 
-    private static int moneyMarketValid(String[] tokens){
-        String balance = tokens[6];
+    /**
+     * Method to check if the initial balance is valid for a money market account
+     * @param balance the inital deposit
+     * @return true (1) or false (0)
+     */
+    private static int moneyMarketValid(String balance){
         if(Integer.parseInt(balance) < 2500){
-            System.out.println("Minimum of $2,000 to open a Money Market account.");
             return 0;
         }
         return 1;
     }
 
-    private static Date createDate(String[] tokens){
-        String dob = tokens[5];
+    /**
+     * Method to create the date instance using the string version
+     * @param dob date as a string
+     * @return an instance of Date
+     */
+    private static Date createDate(String dob){
         String[] parts = dob.split("/");
         int month = Integer.parseInt(parts[0]);
         int day = Integer.parseInt(parts[1]);
@@ -30,12 +47,24 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Method to open an account with the proper validations
+     * @param tokens the information given by the user
+     */
     private void openAccount(String[] tokens){
         String accountTypeStr = tokens[1];
         String branchStr = tokens[2];
         String fname = tokens[3];
         String lname = tokens[4];
         String balance = tokens[6];
+        String dob = tokens[5];
+
+        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
+            if(moneyMarketValid(balance) == 0){
+                System.out.println("Minimum of $2,000 to open a Money Market account.");
+                return;
+            }
+        }
 
         Branch branch = getBranch(branchStr);
         if (branch == null) return;  // Exit if invalid branch.
@@ -43,24 +72,62 @@ public class TransactionManager {
         AccountType accountType = getAccountType(accountTypeStr);
         if (accountType == null) return;  // Exit if invalid account type.
 
-        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
-        Date date = createDate(tokens);
+        if(validInitialDeposit(balance) != 1){
+            return;
+        }
 
-        if (!date.isValid()) {
-            System.out.println("Invalid DOB!!!");
+        Date date = createDate(dob);
+
+        if(!date.isValid()){
+            System.out.println("DOB invalid: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " - not a valid calendar date!");
+            return;
+        }
+        if(!date.isFutureDateValid()){
+            System.out.println("DOB invalid: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " cannot be today or a future day.");
+            return;
+        }
+        if(!date.isLegalAgeValid()){
+            System.out.println("Not eligible to open: " + date.getMonth() + "/" + date.getDay() + "/" + date.getYear() + " under 18!");
             return;
         }
 
         Profile profile = new Profile(fname, lname, date);
+        if(accountDatabase.lookUp(profile, accountType) != -1) return;
+
+        AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Account account = new Account(accountNumber, profile, Integer.parseInt(balance));
 
         if (accountDatabase.add(account)) {
-            System.out.println(accountTypeStr.toUpperCase() + " account " + account.getNumber() + " has been opened.");
+            System.out.println(accountTypeStr.toUpperCase() + " account " + account.getAccountNumberStr() + " has been opened.");
         } else {
             System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
         }
     }
 
+    /**
+     * Check if the initial deposit is valid
+     * @param balance the initial deposit
+     * @return true (1) or false (0)
+     */
+    private int validInitialDeposit(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println("Initial deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
+    }
+
+    /**
+     * Get the branch given the string
+     * @param branchStr the branch as a string
+     * @return the branch
+     */
     private Branch getBranch(String branchStr) {
         Branch branch = Branch.getBranchByName(branchStr.toUpperCase());
         if (branch == null) {
@@ -69,6 +136,11 @@ public class TransactionManager {
         return branch;
     }
 
+    /**
+     * Get the accountType given the string
+     * @param accountTypeStr the string of accountType
+     * @return the account type
+     */
     private AccountType getAccountType(String accountTypeStr) {
         AccountType accountType = AccountType.accountTypeFromName(accountTypeStr);
         if (accountType == null) {
@@ -77,55 +149,165 @@ public class TransactionManager {
         return accountType;
     }
 
+    /**
+     * Generate the account number given the branch and account type
+     * @param branch the branch of the account
+     * @param accountType the account type of the account
+     * @return the instance of accountNumber
+     */
     private AccountNumber generateAccountNumber(Branch branch, AccountType accountType) {
         String branchCode = branch.getBranchCode();
         String accountCode = accountType.getCode();
-        return new AccountNumber(branch, accountType, branchCode + accountCode);
+        return new AccountNumber(branch, accountType);
     }
 
+    /**
+     * Close a singular account
+     * @param tokens the account number given by user
+     */
     private void closeAccount(String[] tokens){
-        String accountNumber = tokens[1];
+        String accountNumberStr = tokens[1];
 
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumber)){
+            if(accounts[i].getAccountNumberStr().equals(accountNumberStr)){
                 accountDatabase.remove(accounts[i]);
-                break;
+                System.out.println(accountNumberStr + " is closed and moved to archive; balance set to 0.");
+                return;
             }
         }
+        System.out.println(accountNumberStr + " account does not exist.");
     }
 
+    /**
+     * Close all accounts of a specific holder
+     * @param tokens the holders information
+     */
+    private void closeAllHolderAccounts(String[] tokens){
+        String fname = tokens[1];
+        String lname = tokens[2];
+        String dob = tokens[3];
+        Date date = createDate(dob);
+        Profile profile = new Profile(fname, lname, date);
+
+        boolean successful = false;
+
+        Account[] accounts = accountDatabase.getAccounts();
+        for(int i = 0; i < accountDatabase.getSize(); i++){
+            if(accounts[i].getHolder().equals(profile)){
+                accountDatabase.remove(accounts[i]);
+                successful = true;
+            }
+        }
+
+        if(successful){
+            System.out.println("All accounts for " + fname + " " + lname + " " + dob + " are closed and moved to archive; balance set to 0.");
+            return;
+        }
+        System.out.println(fname + " " + lname + " " + dob + " does not have any accounts in the database.");
+
+    }
+
+
+
+    /**
+     * Check if the deposit is valid
+     * @param balance the deposit
+     * @return true (1) or false (0)
+     */
+    private int validDeposit(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println(balance + " - deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            // Handle the case where balance is not a valid integer
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
+    }
+
+    /**
+     * Preform a deposit into the account
+     * @param tokens the information given by the user
+     */
     private void depositAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
 
-        Account[] accounts = accountDatabase.getAccounts();
-        for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumberStr)){
-                AccountNumber accountNumber = accounts[i].getAccountNumber();
-                accountDatabase.deposit(accountNumber, Integer.parseInt(amount));
-                break;
+        if(validDeposit(amount) == 1) {
+            Account[] accounts = accountDatabase.getAccounts();
+            for (int i = 0; i < accountDatabase.getSize(); i++) {
+                if (accounts[i].getAccountNumberStr().equals(accountNumberStr)) {
+                    AccountNumber accountNumber = accounts[i].getAccountNumber();
+                    accountDatabase.deposit(accountNumber, Integer.parseInt(amount));
+                    System.out.println("$" + amount + " deposited to " + accountNumberStr + ".");
+                    break;
+                }
             }
         }
 
     }
 
+    /**
+     * Check if the withdrawal is valid
+     * @param balance the withdrawal amount
+     * @return true (1) or false (0)
+     */
+    private int validWithdrawl(String balance) {
+        try {
+            if (Integer.parseInt(balance) > 0) {
+                return 1;
+            }
+            else{
+                System.out.println(balance + " - deposit cannot be 0 or negative.");
+            }
+        } catch (NumberFormatException e) {
+            // Handle the case where balance is not a valid integer
+            System.out.println("For input string: " + balance + " - not a valid amount.");
+        }
+        return 0;
+    }
+
+    /**
+     * Preform a withdrawal from the account
+     * @param tokens the information given by the user
+     */
     private void withdrawAccount(String[] tokens){
         String accountNumberStr = tokens[1];
         String amount = tokens[2];
+        String accountTypeStr = accountNumberStr.substring(3,5);
 
-        Account[] accounts = accountDatabase.getAccounts();
-        for(int i = 0; i < accountDatabase.getSize(); i++){
-            if(accounts[i].getNumber() == Integer.parseInt(accountNumberStr)){
-                AccountNumber accountNumber = accounts[i].getAccountNumber();
-                accountDatabase.withdraw(accountNumber, Integer.parseInt(amount));
-                break;
+        if(validWithdrawl(amount) == 1){
+            Account[] accounts = accountDatabase.getAccounts();
+            for(int i = 0; i < accountDatabase.getSize(); i++) {
+                if (accounts[i].getAccountNumberStr().equals(accountNumberStr)) {
+                    AccountNumber accountNumber = accounts[i].getAccountNumber();
+                    if (accountDatabase.withdraw(accountNumber, Integer.parseInt(amount))) {
+                        if (accountTypeStr.equals("03") && accounts[i].getBalance() < 2000) {
+                            accounts[i].downgrade();
+                            System.out.println(accountNumberStr + " is downgraded to SAVINGS - $" + amount + " withdrawn from " + accountNumberStr);
+                        } else {
+                            System.out.println("$" + amount + " withdrawn from " + accountNumberStr + ".");
+                        }
+                    }
+                    else{
+                        System.out.println(accountNumberStr + " - insufficient funds.");
+                    }
+                    return;
+                }
             }
+            System.out.println(accountNumberStr + " does not exist.");
         }
-
     }
 
 
+    /**
+     * Print the current active accounts database
+     */
     public void printDatabase(){
         if(accountDatabase.isEmpty()){
             System.out.println("Account database is empty!");
@@ -140,6 +322,10 @@ public class TransactionManager {
     }
 
 
+    /**
+     * Method to handle all input cases
+     * @param command the command given by the user
+     */
     private void inputCommands(String command){
         String[] tokens = command.trim().split("\\s+");
         String action = tokens[0];
@@ -148,7 +334,12 @@ public class TransactionManager {
                 openAccount(tokens);
                 break;
             case "C":
-                closeAccount(tokens);
+                if(tokens.length > 2){
+                    closeAllHolderAccounts(tokens);
+                }
+                else {
+                    closeAccount(tokens);
+                }
                 break;
             case "D":
                 depositAccount(tokens);
@@ -160,7 +351,9 @@ public class TransactionManager {
                 printDatabase();
                 break;
             case "PA":
+                System.out.println("*List of closed accounts in the archive.");
                 accountDatabase.printArchive();
+                System.out.println("*end of list.");
                 break;
             case "PB":
                 accountDatabase.printByBranch();
@@ -171,17 +364,17 @@ public class TransactionManager {
             case "PT":
                 accountDatabase.printByType();
                 break;
-            case "Q":
-                RUNNING = false;
-                System.out.println("Transaction Manager is terminated.");
-                break;
             default:
                 System.out.println("Invalid command.");
         }
     }
 
 
-
+    /**
+     * Starts the transaction manager, accepting commands from the user.
+     * It keeps running in a loop until the user enters the command 'Q' to quit.
+     * This method also handles processing of different commands entered by the user
+     */
     public void run() {
         System.out.println("Transaction Manager is running.");
         Scanner scanner = new Scanner(System.in);

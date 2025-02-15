@@ -36,6 +36,7 @@ public class Date implements Comparable<Date> {
     // ✅ Check if the month is valid (1-12)
     private boolean isMonthValid() {
         if (month < 1 || month > 12) {
+
             System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Invalid month!");
             return false;
         }
@@ -45,6 +46,45 @@ public class Date implements Comparable<Date> {
     // ✅ Check if the day is valid within the month
     private boolean isDayValid() {
         if (day < 1) {
+            return false;
+        }
+
+        int maxDays = DAYS_IN_MONTH[month];
+
+        if (day > maxDays) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // ✅ Check if February 29 is correctly handled in leap years
+    private boolean isLeapYearAdjustmentValid() {
+        if (month == 2 && isLeapYear(year) && day > 29) {
+            return false;
+        }
+        return true;
+    }
+
+    // ✅ Check if the date is in the future
+    public boolean isFutureDateValid() {
+        LocalDate today = LocalDate.now();
+
+        LocalDate inputDate = LocalDate.of(year, month, day);
+
+
+        if (inputDate.isAfter(today)) {
+            return false;
+        }
+        return true;
+    }
+
+    // ✅ Check if the user is at least 18 years old
+    public boolean isLegalAgeValid() {
+        LocalDate today = LocalDate.now();
+        LocalDate inputDate = LocalDate.of(year, month, day);
+
+        if (ChronoUnit.YEARS.between(inputDate, today) < LEGAL_AGE) {
             System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Invalid day!");
             return false;
         }
@@ -126,6 +166,19 @@ public class Date implements Comparable<Date> {
         if (month != other.month) return Integer.compare(month, other.month);
         return Integer.compare(day, other.day);
     }
+
+    public int getMonth(){
+        return this.month;
+    }
+
+    public int getDay(){
+        return this.day;
+    }
+
+    public int getYear(){
+        return this.year;
+    }
+
 
     // ✅ Test method for Date class
     public static void testDateClass() {

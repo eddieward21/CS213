@@ -3,29 +3,23 @@ import java.util.Random;
 
 public class AccountNumber implements Comparable<AccountNumber> {
     private static final int SEED = 9999;  // Fixed: Constant should not be modified
+    private static final Random random = new Random(SEED);
     private Branch branch;
     private AccountType type;
     private String number;
 
     // Constructor
-    public AccountNumber(Branch branch, AccountType type, String number) {
+    public AccountNumber(Branch branch, AccountType type) {
         this.branch = branch;
         this.type = type;
-        this.number = number + generateRandomDigits();
+        this.number = generateRandomDigits();
     }
 
     // Generate a 4-digit random number based on a seed
     private String generateRandomDigits() {
-        Random random = new Random(SEED);
-        int randomNumber = random.nextInt(9000) + 1000;
-        return String.valueOf(randomNumber);
-        this.number = number;
-    }
+        int randomNumber = random.nextInt(9999);
+        return String.format("%04d", randomNumber);
 
-    // Generate a 4-digit random number based on a seed
-    public int generateRandomNumber(int seed) {
-        Random random = new Random(seed);
-        return 1000 + random.nextInt(9000);  // Fixed: Corrected nextInt()
     }
 
     // Override equals() for object comparison
@@ -50,11 +44,15 @@ public class AccountNumber implements Comparable<AccountNumber> {
     }
 
     public String getBranch(){
-        return Branch.getBranchByCode(this.number.substring(0, 3));
+        return branch.toString();
     }
 
     public String getNumber(){
         return this.number;
+    }
+
+    public String getAccountNumber(){
+        return this.branch.getBranchCode() + this.type.getCode() + this.number;
     }
 
     public AccountType getType(){
@@ -65,19 +63,36 @@ public class AccountNumber implements Comparable<AccountNumber> {
         return type.getCode();  // Call getCode() method of AccountType enum
     }
 
+    public void downgradeToSavings(){
+        this.type = AccountType.SAVINGS;
+    }
+
 
     // Implement compareTo() for sorting
     @Override
     public int compareTo(AccountNumber other) {
-        return this.number.compareTo(other.number);
+        return this.toString().compareTo(other.toString());
+
     }
 
     public static void main(String[] args) {
+        Branch princeton = Branch.PRINCETON;
+        AccountType checking = AccountType.CHECKING;
+
+        AccountNumber acc1 = new AccountNumber(princeton, checking);
+        AccountNumber acc2 = new AccountNumber(princeton, checking);
+        AccountNumber acc3 = new AccountNumber(princeton, checking);
+
+        System.out.println("Account 1: " + acc1);
+        System.out.println("Account 2: " + acc2);
+        System.out.println("Account 3: " + acc3);
+        System.out.println("Equal? " + acc1.equals(acc2));
+        System.out.println("Comparison: " + acc1.compareTo(acc2));
 
         AccountNumber account = new AccountNumber(new Branch(), new AccountType(), "123456");
 
         // Call generateRandomNumber correctly
-        int randomNum = account.generateRandomNumber(SEED);
+        int randomNum = account.generateRandomDigits(SEED);
         System.out.println("Generated Account Number: " + randomNum);
 
         // Print account details
