@@ -9,10 +9,11 @@ import java.util.Scanner;
 
 public class TransactionManager {
     private boolean RUNNING = true;
-    static private int TRUE = 1;
-    static private int FALSE = 0;
+    private static final int TRUE = 1;
+    private static final int FALSE = 0;
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
+
 
     /**
      * Create an instance of the account database and the archive
@@ -74,9 +75,6 @@ public class TransactionManager {
         AccountType accountType = getAccountType(accountTypeStr);
         if (accountType == null) return;  // Exit if invalid account type.
 
-        if(validInitialDeposit(balance) != 1){
-            return;
-        }
 
         Date date = createDate(dob);
 
@@ -94,15 +92,19 @@ public class TransactionManager {
         }
 
         Profile profile = new Profile(fname, lname, date);
-        if(accountDatabase.lookUp(profile, accountType) != -1) return;
+        if(accountDatabase.lookUp(profile, accountType) != -1){
+            System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
+        }
+
+        if(validInitialDeposit(balance) != 1){
+            return;
+        }
 
         AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Account account = new Account(accountNumber, profile, Integer.parseInt(balance));
 
         if (accountDatabase.add(account)) {
             System.out.println(accountTypeStr.toUpperCase() + " account " + account.getAccountNumberStr() + " has been opened.");
-        } else {
-            System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
         }
     }
 
