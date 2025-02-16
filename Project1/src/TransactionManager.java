@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 public class TransactionManager {
     private boolean RUNNING = true;
+    static private int TRUE = 1;
+    static private int FALSE = 0;
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
 
@@ -28,9 +30,9 @@ public class TransactionManager {
      */
     private static int moneyMarketValid(String balance){
         if(Integer.parseInt(balance) < 2500){
-            return 0;
+            return FALSE;
         }
-        return 1;
+        return TRUE;
     }
 
     /**
@@ -112,7 +114,7 @@ public class TransactionManager {
     private int validInitialDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println("Initial deposit cannot be 0 or negative.");
@@ -120,7 +122,7 @@ public class TransactionManager {
         } catch (NumberFormatException e) {
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -218,7 +220,7 @@ public class TransactionManager {
     private int validDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println(balance + " - deposit cannot be 0 or negative.");
@@ -227,7 +229,7 @@ public class TransactionManager {
             // Handle the case where balance is not a valid integer
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -260,7 +262,7 @@ public class TransactionManager {
     private int validWithdrawl(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println(balance + " - deposit cannot be 0 or negative.");
@@ -269,7 +271,7 @@ public class TransactionManager {
             // Handle the case where balance is not a valid integer
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -313,25 +315,15 @@ public class TransactionManager {
             System.out.println("Account database is empty!");
             return;
         }
-        System.out.println("*List of accounts in the account database.");
+        System.out.println("\n*List of accounts in the account database.");
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
             System.out.println(accounts[i].toString());
         }
-        System.out.println("*end of list.");
+        System.out.println("*end of list.\n");
     }
 
-    /**
-     * Printing the database sorted by the account holders
-     */
-    public void printByHolder(){
-        Account[] sorted = accountDatabase.printByHolder();
-        System.out.println("*List of accounts ordered by account holder and number.");
-        for(int i = 0; i < accountDatabase.getSize(); i++){
-            System.out.println(sorted[i].toString());
-        }
-        System.out.println("*end of list.");
-    }
+
 
 
 
@@ -371,7 +363,7 @@ public class TransactionManager {
                 accountDatabase.printByBranch();
                 break;
             case "PH":
-                printByHolder();
+                accountDatabase.printByHolder();
                 break;
             case "PT":
                 accountDatabase.printByType();
@@ -400,7 +392,11 @@ public class TransactionManager {
                 break;
             }
 
-            // Handle different commands (example: transaction processing, etc.)
+            if (command.isEmpty()) {
+                continue;
+            }
+
+
             inputCommands(command);
         }
 

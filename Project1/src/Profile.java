@@ -78,7 +78,6 @@ public class Profile implements Comparable<Profile> {
 
 
     public static void main(String[] args) {
-        //Need testbed for compare functions
         Date date1 = new Date(2000, 1, 1);
         Date date2 = new Date(1999, 10, 25);
         Date date3 = new Date(2000, 1, 1);
@@ -100,9 +99,9 @@ public class Profile implements Comparable<Profile> {
 
         // Testing compareTo()
         System.out.println("\nTesting compareTo():");
-        System.out.println("p1.compareTo(p2): " + p1.compareTo(p2)); // Expected: positive (Doe > Smith)
-        System.out.println("p2.compareTo(p1): " + p2.compareTo(p1)); // Expected: negative (Smith < Doe)
-        System.out.println("p1.compareTo(p3): " + p1.compareTo(p3)); // Expected: 0
+        System.out.println("p1.compareTo(p2): " + p1.compareTo(p2));
+        System.out.println("p2.compareTo(p1): " + p2.compareTo(p1));
+        System.out.println("p1.compareTo(p3): " + p1.compareTo(p3));
 
         System.out.println("\nAll tests completed.");
 
