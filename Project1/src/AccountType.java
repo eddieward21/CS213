@@ -1,22 +1,49 @@
+/**
+ * @auther Eddie Ward
+ * The AccountType represents different types of bank accounts.
+ * Account types include:
+ * - CHECKING (code: "01")
+ * - SAVINGS (code: "02")
+ * - MONEYMARKET (code: "03")
+ *
+ * This enum provides methods to retrieve an account type based on a code or name.
+ */
 public enum AccountType {
     CHECKING("01"),
     SAVINGS("02"),
-    MONEYMARKET("03");
+    MONEYMARKET("03"),
     REGULARSAVINGS("02"),
     MONEYMARKETSAVINGS("03");
 
     private final String code;
 
+    /**
+     * Constructor to associate a code with each account type.
+     *
+     * @param code The string representation of the account type.
+     */
     AccountType(String code) {
         this.code = code;
     }
 
+    /**
+     * Retrieves the code associated with the account type.
+     *
+     * @return The string code of the account type.
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Retrieves the AccountType corresponding to a given code.
+     *
+     * @param code The string code to search for.
+     * @return The matching AccountType.
+     * @throws IllegalArgumentException if no matching type is found.
+     */
     public static AccountType accountTypeFromCode(String code) {
-        for(AccountType type: AccountType.values() ) {
+        for (AccountType type : AccountType.values()) {
             if (type.code.equals(code)) {
                 return type;
             }
@@ -24,6 +51,12 @@ public enum AccountType {
         throw new IllegalArgumentException("Invalid code " + code);
     }
 
+    /**
+     * Retrieves the AccountType based on its name.
+     *
+     * @param name The string name of the account type.
+     * @return The matching AccountType or null if the name is invalid.
+     */
     public static AccountType accountTypeFromName(String name) {
         try {
             return AccountType.valueOf(name.toUpperCase());
@@ -32,14 +65,10 @@ public enum AccountType {
         }
     }
 
-
-
-    public static void main(String[] args) {
-
-    }
-
-}
-    public static void testAccountType () {
+    /**
+     * Runs test cases to verify the functionality of the AccountType enum.
+     */
+    public static void testAccountType() {
         System.out.println("testAccountType()... ");
 
         System.out.println("Testing 01: ");
@@ -47,8 +76,12 @@ public enum AccountType {
         System.out.println(type1);
     }
 
+    /**
+     * Main method to execute test cases.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         testAccountType();
     }
-
 }
