@@ -62,19 +62,11 @@ public class TransactionManager {
         String balance = tokens[6];
         String dob = tokens[5];
 
-        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
-            if(moneyMarketValid(balance) == 0){
-                System.out.println("Minimum of $2,000 to open a Money Market account.");
-                return;
-            }
-        }
-
         Branch branch = getBranch(branchStr);
         if (branch == null) return;  // Exit if invalid branch.
 
         AccountType accountType = getAccountType(accountTypeStr);
         if (accountType == null) return;  // Exit if invalid account type.
-
 
         Date date = createDate(dob);
 
@@ -94,10 +86,18 @@ public class TransactionManager {
         Profile profile = new Profile(fname, lname, date);
         if(accountDatabase.lookUp(profile, accountType) != -1){
             System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
+            return;
         }
 
         if(validInitialDeposit(balance) != 1){
             return;
+        }
+
+        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
+            if(moneyMarketValid(balance) == 0){
+                System.out.println("Minimum of $2,000 to open a Money Market account.");
+                return;
+            }
         }
 
         AccountNumber accountNumber = generateAccountNumber(branch, accountType);
@@ -385,23 +385,17 @@ public class TransactionManager {
         System.out.println("Transaction Manager is running.");
         Scanner scanner = new Scanner(System.in);
 
-        // Infinite loop to keep reading commands until 'Q' is entered
         while (RUNNING) {
             System.out.print("Enter command: ");
             String command = scanner.nextLine().trim();
-
             if ("Q".equals(command)) {
                 break;
             }
-
             if (command.isEmpty()) {
                 continue;
             }
-
-
             inputCommands(command);
         }
-
         scanner.close();
         System.out.println("Transaction Manager is terminated.");
     }

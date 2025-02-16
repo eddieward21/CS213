@@ -25,11 +25,12 @@ public class Archive {
             return;
         }
 
-
+        System.out.println("\n*List of closed accounts in the archive.");
         while (current != null) {
             System.out.println(current.account);
             current = current.next;
         }
+        System.out.println("*end of list.\n");
 
     }
 

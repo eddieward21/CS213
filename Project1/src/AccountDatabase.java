@@ -187,7 +187,6 @@ public class AccountDatabase {
      *
      */
     public void printByBranch() {
-
         Account[] sortedAccounts = sortByBranch();
 
         System.out.println("\n*List of accounts ordered by branch location (county, city).");
