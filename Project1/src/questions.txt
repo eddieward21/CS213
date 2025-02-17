@@ -1,3 +1,0 @@
-- How to generate the random 4 digits for the account number
-- How to check for invalid dob (all cases separately)
-- How to deal with invalid initial deposits, deposits, and withdrawals (i.e abc)

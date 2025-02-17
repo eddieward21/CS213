@@ -1,3 +1,15 @@
+package transaction_manager;
+
+import account.Account;
+import account_database.AccountDatabase;
+import account_number.AccountNumber;
+import account_type.AccountType;
+import archive.Archive;
+import branch.Branch;
+import date.Date;
+import profile.Profile;
+
+import java.util.Scanner;
 /**
  * This class manages various banking transactions such as opening accounts,
  * making deposits and withdrawals, closing accounts, and printing the account database.
@@ -5,12 +17,18 @@
  *
  * @author George Seriani
  */
-import java.util.Scanner;
-
 public class TransactionManager {
     private boolean RUNNING = true;
+
+    /**
+     * Express True as integer
+     */
     private static final int TRUE = 1;
+    /**
+     * Express False as integer
+     */
     private static final int FALSE = 0;
+
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
 
@@ -19,8 +37,8 @@ public class TransactionManager {
      * Create an instance of the account database and the archive
      */
     public TransactionManager() {
-        this.accountDatabase = new AccountDatabase();  // Initialize your AccountDatabase
-        this.accountArchive = new Archive();  // Initialize Archive if needed
+        this.accountDatabase = new AccountDatabase();  // Initialize your account_database.AccountDatabase
+        this.accountArchive = new Archive();  // Initialize archive.Archive if needed
     }
 
 
@@ -39,7 +57,7 @@ public class TransactionManager {
     /**
      * Method to create the date instance using the string version
      * @param dob date as a string
-     * @return an instance of Date
+     * @return an instance of date.Date
      */
     private static Date createDate(String dob){
         String[] parts = dob.split("/");
@@ -84,16 +102,25 @@ public class TransactionManager {
         }
 
         Profile profile = new Profile(fname, lname, date);
-        if(accountDatabase.lookUp(profile, accountType) != -1){
-            System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
+
+
+        if(validInitialDeposit(balance) != TRUE){
             return;
         }
+        else{
+            if(accountDatabase.lookUp(profile, accountType) != -1){
+                System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
+                return;
+            }
+            else if(Integer.parseInt(balance) <= 0){
+                System.out.println("Initial deposit cannot be 0 or negative.");
+                return;
+            }
 
-        if(validInitialDeposit(balance) != 1){
-            return;
         }
 
         if(accountTypeStr.equalsIgnoreCase("moneymarket")){
+            accountTypeStr = "MONEY_MARKET";
             if(moneyMarketValid(balance) == 0){
                 System.out.println("Minimum of $2,000 to open a Money Market account.");
                 return;
@@ -118,8 +145,8 @@ public class TransactionManager {
             if (Integer.parseInt(balance) > 0) {
                 return TRUE;
             }
-            else{
-                System.out.println("Initial deposit cannot be 0 or negative.");
+            else {
+                return TRUE;
             }
         } catch (NumberFormatException e) {
             System.out.println("For input string: " + balance + " - not a valid amount.");
@@ -314,7 +341,7 @@ public class TransactionManager {
      */
     public void printDatabase(){
         if(accountDatabase.isEmpty()){
-            System.out.println("Account database is empty!");
+            System.out.println("account.account.Account database is empty!");
             return;
         }
         System.out.println("\n*List of accounts in the account database.");
@@ -324,10 +351,6 @@ public class TransactionManager {
         }
         System.out.println("*end of list.\n");
     }
-
-
-
-
 
 
     /**

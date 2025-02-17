@@ -1,5 +1,7 @@
+package account;
+
 /**
- * Account class represents a bank account with basic functionalities such as
+ * account.Account class represents a bank account with basic functionalities such as
  * deposit, withdrawal, balance updates, and account management. It implements
  * the Comparable interface to allow comparison of accounts based on account numbers.
  *
@@ -11,7 +13,13 @@ public class Account implements Comparable<Account> {
     private Profile holder;
     private double balance;
 
+    /**
+     * True as a integer
+     */
     private static final int TRUE = 1;
+    /**
+     * False as a integer
+     */
     private static final int FALSE = 0;
 
 
@@ -82,7 +90,7 @@ public class Account implements Comparable<Account> {
 
     @Override
     public String toString(){
-        return "Account*[" + this.number.getAccountNumber() + "] Holder[" + this.holder.toString() + "] Balance[$" + this.balance + "] Branch [" + this.number.getBranch() + "]";
+        return "account.account.Account*[" + this.number.getAccountNumber() + "] Holder[" + this.holder.toString() + "] Balance[$" + this.balance + "] branch.Branch [" + this.number.getBranch() + "]";
     }
 
 

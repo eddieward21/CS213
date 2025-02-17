@@ -1,5 +1,9 @@
+package profile;
+
+import date.Date;
+
 /**
- * This class represents a Profile with a first name, last name, and date of birth.
+ * This class represents a profile.Profile with a first name, last name, and date of birth.
  * It implements the Comparable interface to allow profile comparisons.
  *
  * @author George Seriani

@@ -1,3 +1,5 @@
+package branch;
+
 /**
  * Enum represents different branches of the bank.
  * Contains information such as the branch's zipcode, branch code, and county.
@@ -12,8 +14,17 @@ public enum Branch {
     PISCATAWAY("08854", "400", "Middlesex"),
     WARREN("07059", "500", "Somerset");
 
+    /**
+     * zipcode
+     */
     private final String zip;
+    /**
+     * branch as code
+     */
     private final String branchCode;
+    /**
+     * county
+     */
     private final String county;
 
     /**
@@ -56,7 +67,7 @@ public enum Branch {
 
 
     /**
-     * Matching the Branch code to the correct branch
+     * Matching the branch.Branch code to the correct branch
      * @param branchCode the branch code of the current account
      * @return the branch name of the branch code we are searching
      */
@@ -71,9 +82,9 @@ public enum Branch {
     }
 
     /**
-     * Getting the Branch name given the String
+     * Getting the branch.Branch name given the String
      * @param branchName the String literal of the Brnch name
-     * @return The Branch name
+     * @return The branch.Branch name
      */
     public static Branch getBranchByName(String branchName) {
         try {

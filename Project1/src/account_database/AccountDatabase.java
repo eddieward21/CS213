@@ -1,15 +1,26 @@
+package account_database;
+
+import account.Account;
+import account_number.AccountNumber;
+
 /**
- * This class represents an Account Database that manages accounts.
+ * This class represents an account.account.Account Database that manages accounts.
  * It includes functionalities to add, remove, and search the database.
  *
  * @author George Seriani
  */
 public class AccountDatabase {
-    private Account [] accounts;
+    private Account[] accounts;
     private int size;
     private Archive archive; //a linked list of closed account
 
+    /**
+     * Capacity of array database
+     */
     private static final int CAPACITY = 4;
+    /**
+     * To express account not found
+     */
     private static final int NOT_FOUND = -1;
 
     /**
@@ -76,6 +87,7 @@ public class AccountDatabase {
     /**
      * Add an account to the database, only if it doesn't already exist in the account
      * @param account the account we would like to add
+     * @return true if the account is added successfully, false otherwise
      */
     public boolean add(Account account) {
         if(contains(account)){
@@ -91,6 +103,7 @@ public class AccountDatabase {
     /**
      * Remove an account if it exists in the database, and add to the archive
      * @param account the account we want to remove
+     * @return true if account removed successfully, false otherwise
      */
     public boolean remove(Account account) {
         if(contains(account)){
@@ -106,7 +119,7 @@ public class AccountDatabase {
     }
 
     /**
-     * Find the account that would like to withdraw money and call the withdrawal method created in Account()
+     * Find the account that would like to withdraw money and call the withdrawal method created in account.account.Account()
      * @param number the account number of the account that would like to withdraw
      * @param amount the amount the user would like to withdraw
      * @return true if successful, false otherwise
@@ -121,7 +134,7 @@ public class AccountDatabase {
     }
 
     /**
-     * Find the account that would like to deposit money and call the deposit method created in Account()
+     * Find the account that would like to deposit money and call the deposit method created in account.account.Account()
      * @param number the account number of the account that would like to deposit
      * @param amount the amount the user would like to deposit
      */
@@ -136,7 +149,7 @@ public class AccountDatabase {
     }
 
     /**
-     * Print the Archive database
+     * Print the archive.Archive database
      */
     public void printArchive() {
         archive.printLL();
@@ -302,7 +315,11 @@ public class AccountDatabase {
             String accountType = AccountType.accountTypeFromCode(sortedAccounts[i].getAccountType().getCode()).toString();
 
             if (!accountType.equals(currentAccountType)) {
-                System.out.println("Account Type: " + accountType);
+                String accountTypeFixed = accountType;
+                if(accountType.equalsIgnoreCase("moneymarket")){
+                    accountTypeFixed = "MONEY_MARKET";
+                }
+                System.out.println("account.account.Account Type: " + accountTypeFixed);
                 currentAccountType = accountType;
             }
 
