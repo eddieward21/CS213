@@ -61,12 +61,12 @@ public class Profile implements Comparable<Profile> {
 
     @Override
     public int compareTo(Profile profile) {
-        int lnameComp = this.lname.compareTo(profile.lname);
+        int lnameComp = this.lname.toLowerCase().compareTo(profile.lname.toLowerCase());
         if (lnameComp != 0) {
             return lnameComp;
         }
 
-        int fnameComp = this.fname.compareTo(profile.fname);
+        int fnameComp = this.fname.toLowerCase().compareTo(profile.fname.toLowerCase());
         if (fnameComp != 0) {
             return fnameComp;
         }
@@ -78,33 +78,54 @@ public class Profile implements Comparable<Profile> {
 
 
     public static void main(String[] args) {
-        //Need testbed for compare functions
-        Date date1 = new Date(2000, 1, 1);
-        Date date2 = new Date(1999, 10, 25);
-        Date date3 = new Date(2000, 1, 1);
+        Profile p1 = new Profile("John", "Adams", new Date(1990, 5, 15));
+        Profile p2 = new Profile("Mike", "Brown", new Date(1990, 5, 15));
+        System.out.println("Test case 1 (Different last names):");
+        System.out.println("Comparing: " + p1 + " with " + p2);
+        System.out.println("Expected: -1, Actual: " + (p1.compareTo(p2) < 0 ? -1 : 1));
+        System.out.println();
 
-        Profile p1 = new Profile("John", "Doe", date1);
-        Profile p2 = new Profile("Alice", "Smith", date2);
-        Profile p3 = new Profile("John", "Doe", date3);
+        Profile p3 = new Profile("Alice", "Smith", new Date(1990, 5, 15));
+        Profile p4 = new Profile("Bob", "Smith", new Date(1990, 5, 15));
+        System.out.println("Test case 2 (Same last name, different first names):");
+        System.out.println("Comparing: " + p3 + " with " + p4);
+        System.out.println("Expected: -1, Actual: " + (p3.compareTo(p4) < 0 ? -1 : 1));
+        System.out.println();
 
-        // Testing toString()
-        System.out.println("Testing toString():");
-        System.out.println("p1: " + p1.toString());
-        System.out.println("p2: " + p2.toString());
-        System.out.println("p3: " + p3.toString());
+        Profile p5 = new Profile("John", "Smith", new Date(1990, 5, 15));
+        Profile p6 = new Profile("John", "Smith", new Date(1995, 5, 15));
+        System.out.println("Test case 3 (Same names, different DOB):");
+        System.out.println("Comparing: " + p5 + " with " + p6);
+        System.out.println("Expected: -1, Actual: " + (p5.compareTo(p6) < 0 ? -1 : 1));
+        System.out.println();
 
-        // Testing equals()
-        System.out.println("\nTesting equals():");
-        System.out.println("p1.equals(p2): " + p1.equals(p2));
-        System.out.println("p1.equals(p3): " + p1.equals(p3));
+        Profile p7 = new Profile("John", "Wilson", new Date(1990, 5, 15));
+        Profile p8 = new Profile("Mike", "Thompson", new Date(1990, 5, 15));
+        System.out.println("Test case 4 (Different last names):");
+        System.out.println("Comparing: " + p7 + " with " + p8);
+        System.out.println("Expected: 1, Actual: " + (p7.compareTo(p8) > 0 ? 1 : -1));
+        System.out.println();
 
-        // Testing compareTo()
-        System.out.println("\nTesting compareTo():");
-        System.out.println("p1.compareTo(p2): " + p1.compareTo(p2)); // Expected: positive (Doe > Smith)
-        System.out.println("p2.compareTo(p1): " + p2.compareTo(p1)); // Expected: negative (Smith < Doe)
-        System.out.println("p1.compareTo(p3): " + p1.compareTo(p3)); // Expected: 0
+        Profile p9 = new Profile("Mike", "Smith", new Date(1990, 5, 15));
+        Profile p10 = new Profile("John", "Smith", new Date(1990, 5, 15));
+        System.out.println("Test case 5 (Same last name, different first names):");
+        System.out.println("Comparing: " + p9 + " with " + p10);
+        System.out.println("Expected: 1, Actual: " + (p9.compareTo(p10) > 0 ? 1 : -1));
+        System.out.println();
 
-        System.out.println("\nAll tests completed.");
+        Profile p11 = new Profile("John", "Smith", new Date(1995, 5, 15));
+        Profile p12 = new Profile("John", "Smith", new Date(1990, 5, 15));
+        System.out.println("Test case 6 (Same names, different DOB):");
+        System.out.println("Comparing: " + p11 + " with " + p12);
+        System.out.println("Expected: 1, Actual: " + (p11.compareTo(p12) > 0 ? 1 : -1));
+        System.out.println();
 
+        Profile p13 = new Profile("John", "Smith", new Date(1990, 5, 15));
+        Profile p14 = new Profile("John", "Smith", new Date(1990, 5, 15));
+        System.out.println("Test case 7 (Identical profiles):");
+        System.out.println("Comparing: " + p13 + " with " + p14);
+        System.out.println("Expected: 0, Actual: " + p13.compareTo(p14));
+        System.out.println();
     }
+
 }

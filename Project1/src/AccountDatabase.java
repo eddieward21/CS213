@@ -142,12 +142,175 @@ public class AccountDatabase {
         archive.printLL();
     }
 
-    public void printByBranch() {
+    /**
+     * Helper method to sort accounts by branch location.
+     * Sorts first by county, then by branch name within each county.
+     * @return Array of accounts sorted by branch location
+     */
+    private Account[] sortByBranch(){
+        Account[] sortedAccounts = new Account[size];
+        for (int i = 0; i < size; i++) {
+            sortedAccounts[i] = accounts[i];
+        }
 
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                Branch currentBranch = Branch.getBranchByName(sortedAccounts[j].getAccountNumber().getBranch());
+                Branch minBranch = Branch.getBranchByName(sortedAccounts[minIndex].getAccountNumber().getBranch());
+
+                int countyCompare = currentBranch.getCounty().compareTo(minBranch.getCounty());
+
+                if (countyCompare == 0) {
+                    int branchCompare = currentBranch.toString().compareTo(minBranch.toString());
+                    if (branchCompare < 0) {
+                        minIndex = j;
+                    }
+                }
+
+                else if (countyCompare < 0) {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                Account temp = sortedAccounts[i];
+                sortedAccounts[i] = sortedAccounts[minIndex];
+                sortedAccounts[minIndex] = temp;
+            }
+        }
+        return sortedAccounts;
+    }
+
+    /**
+     * Prints all accounts in the database ordered by branch location.
+     *
+     */
+    public void printByBranch() {
+        Account[] sortedAccounts = sortByBranch();
+
+        System.out.println("\n*List of accounts ordered by branch location (county, city).");
+
+        String currentCounty = null;
+        for (int i = 0; i < size; i++) {
+            Branch branch = Branch.getBranchByName(sortedAccounts[i].getAccountNumber().getBranch());
+            String county = branch.getCounty();
+
+            if (!county.equals(currentCounty)) {
+                System.out.println("County: " + county);
+                currentCounty = county;
+            }
+
+            System.out.println(sortedAccounts[i].toString());
+        }
+
+        System.out.println("*end of list.\n");
 
     }
-    public void printByHolder() {}
-    public void printByType() {}
+
+    /**
+     * Prints all accounts in the database ordered by account holder name and account number.
+     * For holders with multiple accounts, those accounts are sorted by account number.
+     * Uses selection sort to maintain the order of accounts.
+     */
+    public void printByHolder() {
+        Account[] sortedAccounts = new Account[size];
+        for (int i = 0; i < size; i++) {
+            sortedAccounts[i] = accounts[i];
+        }
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                int holderCompare = sortedAccounts[j].getHolder().compareTo(sortedAccounts[minIndex].getHolder());
+
+                if (holderCompare == 0) {
+                    if (sortedAccounts[j].getNumber() < sortedAccounts[minIndex].getNumber()) {
+                        minIndex = j;
+                    }
+                }
+                else if (holderCompare < 0) {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                Account temp = sortedAccounts[i];
+                sortedAccounts[i] = sortedAccounts[minIndex];
+                sortedAccounts[minIndex] = temp;
+            }
+        }
+
+        System.out.println("\n*List of accounts ordered by account holder and number.");
+        for(int i = 0; i < size; i++){
+            System.out.println(sortedAccounts[i].toString());
+        }
+        System.out.println("*end of list.\n");
+    }
+
+    /**
+     * Helper method to sort accounts by their type and account number.
+     * Sorts first by account type code, then by account number within each type.
+     * @return Array of accounts sorted by type and number
+     */
+    private Account[] sortByType(){
+        Account[] sortedAccounts = new Account[size];
+        for (int i = 0; i < size; i++) {
+            sortedAccounts[i] = accounts[i];
+        }
+
+        for (int i = 0; i < size - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                AccountType currentAccountType = sortedAccounts[j].getAccountType();
+                AccountType minAccountType = sortedAccounts[minIndex].getAccountType();
+
+                // Compare account types first
+                int accountTypeCompare = currentAccountType.getCode().compareTo(minAccountType.getCode());
+
+                if (accountTypeCompare == 0) {
+                    if (sortedAccounts[j].getNumber() < sortedAccounts[minIndex].getNumber()) {
+                        minIndex = j;
+                    }
+                } else if (accountTypeCompare < 0) {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                Account temp = sortedAccounts[i];
+                sortedAccounts[i] = sortedAccounts[minIndex];
+                sortedAccounts[minIndex] = temp;
+            }
+
+        }
+
+        return sortedAccounts;
+    }
+
+    /**
+     * Prints all accounts in the database ordered by account type.
+     * Displays accounts grouped by type, with a header for each type.
+     * Within each type, accounts are sorted by account number.
+     */
+    public void printByType() {
+        Account[] sortedAccounts = sortByType();
+
+        System.out.println("\n*List of accounts ordered by account type and number.");
+
+        String currentAccountType = null;
+        for (int i = 0; i < size; i++) {
+            String accountType = AccountType.accountTypeFromCode(sortedAccounts[i].getAccountType().getCode()).toString();
+
+            if (!accountType.equals(currentAccountType)) {
+                System.out.println("Account Type: " + accountType);
+                currentAccountType = accountType;
+            }
+
+            System.out.println(sortedAccounts[i].toString());
+        }
+
+        System.out.println("*end of list.\n");
+    }
 
     /**
      * Helper Method to get the size of the database
@@ -172,9 +335,6 @@ public class AccountDatabase {
     public boolean isEmpty(){
         return size == 0;
     }
-
-
-
 
 
     public static void main(String[] args) {

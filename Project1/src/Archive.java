@@ -32,20 +32,25 @@ public class Archive {
         first = newNode;
     }
 
+
     /**
      * Prints all accounts in the linked list.
      */
     public void printLL() {
         AccountNode current = first;
         if (current == null) {
-            System.out.println("empty.");
+            System.out.println("No Accounts in the Archive.");
             return;
         }
+
+        System.out.println("\n*List of closed accounts in the archive.");
 
         while (current != null) {
             System.out.println(current.account);
             current = current.next;
         }
+        System.out.println("*end of list.\n");
+
     }
 
     /**

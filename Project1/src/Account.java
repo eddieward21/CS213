@@ -11,6 +11,9 @@ public class Account implements Comparable<Account> {
     private Profile holder;
     private double balance;
 
+    private static final int TRUE = 1;
+    private static final int FALSE = 0;
+
 
     /**
      *  Constructor to initialize the private variables
@@ -40,10 +43,10 @@ public class Account implements Comparable<Account> {
     public int withdraw(double amount) {
         if (amount > 0 && amount <= balance){
             balance -= amount; // Done in the database?
-            return 1;
+            return TRUE;
         }
         else{
-            return 0;
+            return FALSE;
         }
     }
 
@@ -55,10 +58,10 @@ public class Account implements Comparable<Account> {
     public int deposit(double amount) {
         if (amount > 0) {
             balance += amount; //Done in the database?
-            return 1;
+            return TRUE;
         }
         else{
-            return 0;
+            return FALSE;
         }
     }
 
@@ -96,9 +99,6 @@ public class Account implements Comparable<Account> {
     public int getNumber() {
         return Integer.parseInt(number.getNumber());
     }
-
-
-
 
     /**
      * A getter method to get the accounts balance
