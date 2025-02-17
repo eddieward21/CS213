@@ -147,6 +147,10 @@ public class Account implements Comparable<Account> {
         return this.number.getType();
     }
 
+    /**
+     * Doesn't do anything.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
 
 

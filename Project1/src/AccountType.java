@@ -1,5 +1,5 @@
 /**
- * @auther Eddie Ward
+ * @author Eddie Ward
  * The AccountType represents different types of bank accounts.
  * Account types include:
  * - CHECKING (code: "01")

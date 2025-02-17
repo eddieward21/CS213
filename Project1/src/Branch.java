@@ -6,6 +6,9 @@
  * @author George Seriani
  */
 public enum Branch {
+    /**
+     * Edison, Bridgewater, Princeton, Piscataway, Warren locations for Branch. Zipcode, Branch code, County.
+     */
     EDISON("08817", "100", "Middlesex"),
     BRIDGEWATER("08807", "200", "Somerset"),
     PRINCETON("08540", "300", "Mercer"),
@@ -83,17 +86,9 @@ public enum Branch {
         }
     }
 
-    public String getZip() {
-        return zip;
-    }
-    public String getBranchCode() {
-        return branchCode;
-    }
-    public String getCounty() {
-        return county;
-    }
-
-
+    /**
+     * Testing method for the branch
+     */
     public static void testBranch() {
         System.out.println("testBranch(): ");
 
@@ -104,6 +99,10 @@ public enum Branch {
         System.out.println("County: " + testBranch.getCounty());
     }
 
+    /**
+     * calls the testBranch() method.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         testBranch();
     }

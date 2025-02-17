@@ -75,8 +75,10 @@ public class Profile implements Comparable<Profile> {
     }
 
 
-
-
+    /**
+     * Tests profiles
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         //Need testbed for compare functions
         Date date1 = new Date(2000, 1, 1);

@@ -123,49 +123,9 @@ public class Date implements Comparable<Date> {
             System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Not a valid calendar date!");
             return false;
         }
-
-        return true;
-    }
-    /**
-    // Check February 29 is handled in leap years
-    @return true if leap year adjustment valid.false otherwise.
-     */
-    private boolean isLeapYearAdjustmentValid() {
-        if (month == 2 && isLeapYear(year) && day > 29) {
-            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - February has only 29 days in a leap year!");
-            return false;
-        }
-        return true;
-    }
-    /**
-    //Check if date is in the future
-    @return true if date is valid, false otherwise
-     */
-    private boolean isFutureDateValid() {
-        LocalDate today = LocalDate.now();
-        LocalDate inputDate = LocalDate.of(year, month, day);
-
-        if (inputDate.isAfter(today)) {
-            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - Cannot be in the future!");
-            return false;
-        }
         return true;
     }
 
-    /**
-    // Check if at least 18 years old
-    @return true if at least 18 false otherwise
-     */
-    private boolean isLegalAgeValid() {
-        LocalDate today = LocalDate.now();
-        LocalDate inputDate = LocalDate.of(year, month, day);
-
-        if (ChronoUnit.YEARS.between(inputDate, today) < LEGAL_AGE) {
-            System.out.println("DOB invalid: " + month + "/" + day + "/" + year + " - User is under 18!");
-            return false;
-        }
-        return true;
-    }
 
     /**
     // helper method to check if the year is a leap year

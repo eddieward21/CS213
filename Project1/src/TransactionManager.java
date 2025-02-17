@@ -396,6 +396,10 @@ public class TransactionManager {
         System.out.println("Transaction Manager is terminated.");
     }
 
+    /**
+     * Creates a TransactionManager instance and runs it
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         TransactionManager transactionManager = new TransactionManager();
         transactionManager.run();
