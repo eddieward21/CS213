@@ -2,8 +2,8 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * @author Eddie Ward
  * Class represents a unique account number assigned to a bank account
+ * @author Eddie Ward
  */
 public class AccountNumber implements Comparable<AccountNumber> {
     private static final int SEED = 9999;  // Fixed: Constant should not be modified
@@ -112,7 +112,6 @@ public class AccountNumber implements Comparable<AccountNumber> {
     @Override
     public int compareTo(AccountNumber other) {
         return this.toString().compareTo(other.toString());
-
     }
     /**
      * Main method to test the AccountNumber class.

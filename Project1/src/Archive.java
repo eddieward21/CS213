@@ -1,6 +1,6 @@
 /**
- * @author Eddie Ward
  * The Archive class stores accounts in a linked list.
+ * @author Eddie Ward
  */
 public class Archive {
     private AccountNode first; // Head of the linked list

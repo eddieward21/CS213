@@ -2,18 +2,29 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 /**
- * @author Eddie Ward
  * Date for the account. Checks if the DOB of the account holder is valid.
- *
+ * @author Eddie Ward
  */
 public class Date implements Comparable<Date> {
     private int year;
     private int month;
     private int day;
 
+    /**
+     * Quadrennial: 4 years
+     */
     public static final int QUADRENNIAL = 4;
+    /**
+     * Centennial: 100 years
+     */
     public static final int CENTENNIAL = 100;
+    /**
+     * Quartercentennial: 400 years
+     */
     public static final int QUATERCENTENNIAL = 400;
+    /**
+     * Legal age = 18
+     */
     public static final int LEGAL_AGE = 18;
 
     private static final int[] DAYS_IN_MONTH = {
@@ -144,7 +155,7 @@ public class Date implements Comparable<Date> {
 
     /**
     // compare two dates to see if equal
-    @param other date to compare to
+    @param obj The date to compare to
     @return negative value if other date earlier, 0 if equal, positive value if other date later
      */
     @Override
@@ -189,8 +200,10 @@ public class Date implements Comparable<Date> {
         return this.year;
     }
 
+    /**
+    Test method for Date class
 
-    // Test method for Date class
+     **/
     public static void testDateClass() {
         System.out.println("Tests...\n");
 
@@ -225,8 +238,8 @@ public class Date implements Comparable<Date> {
         System.out.println("\n completed.\n");
     }
     /**
-    // main method calls testDateClass()
-    @param command line args
+    main method calls testDateClass()
+    @param args command line args
      */
     public static void main(String[] args) {
         testDateClass();

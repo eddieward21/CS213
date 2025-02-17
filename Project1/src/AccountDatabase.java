@@ -1,7 +1,6 @@
 /**
  * This class represents an Account Database that manages accounts.
  * It includes functionalities to add, remove, and search the database.
- *
  * @author George Seriani
  */
 public class AccountDatabase {
@@ -76,6 +75,7 @@ public class AccountDatabase {
     /**
      * Add an account to the database, only if it doesn't already exist in the account
      * @param account the account we would like to add
+     * @return true or false depending on whether the account is added
      */
     public boolean add(Account account) {
         if(contains(account)){
@@ -91,6 +91,7 @@ public class AccountDatabase {
     /**
      * Remove an account if it exists in the database, and add to the archive
      * @param account the account we want to remove
+     * @return true or false depending on whether the account is removed
      */
     public boolean remove(Account account) {
         if(contains(account)){
@@ -336,7 +337,10 @@ public class AccountDatabase {
         return size == 0;
     }
 
-
+    /**
+     * doesnt do anything here
+     * @param args command line args
+     */
     public static void main(String[] args) {
 
     }

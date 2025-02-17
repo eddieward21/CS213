@@ -1,3 +1,4 @@
+import java.util.Scanner;
 /**
  * This class manages various banking transactions such as opening accounts,
  * making deposits and withdrawals, closing accounts, and printing the account database.
@@ -5,15 +6,12 @@
  *
  * @author George Seriani
  */
-import java.util.Scanner;
-
 public class TransactionManager {
     private boolean RUNNING = true;
     private static final int TRUE = 1;
     private static final int FALSE = 0;
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
-
 
     /**
      * Create an instance of the account database and the archive

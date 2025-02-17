@@ -10,9 +10,21 @@ public enum Branch {
      * Edison, Bridgewater, Princeton, Piscataway, Warren locations for Branch. Zipcode, Branch code, County.
      */
     EDISON("08817", "100", "Middlesex"),
+    /**
+     * Bridgewater
+     */
     BRIDGEWATER("08807", "200", "Somerset"),
+    /**
+     * Princeton
+     */
     PRINCETON("08540", "300", "Mercer"),
+    /**
+     * Piscataway
+     */
     PISCATAWAY("08854", "400", "Middlesex"),
+    /**
+     * Warren
+     */
     WARREN("07059", "500", "Somerset");
 
     private final String zip;

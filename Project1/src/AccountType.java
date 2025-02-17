@@ -1,5 +1,4 @@
 /**
- * @author Eddie Ward
  * The AccountType represents different types of bank accounts.
  * Account types include:
  * - CHECKING (code: "01")
@@ -7,12 +6,28 @@
  * - MONEYMARKET (code: "03")
  *
  * This enum provides methods to retrieve an account type based on a code or name.
+ *  * @author Eddie Ward
  */
 public enum AccountType {
+    /**
+     * Checking
+     */
     CHECKING("01"),
+    /**
+     * Savings
+     */
     SAVINGS("02"),
+    /**
+     * Moneymarket
+     */
     MONEYMARKET("03"),
+    /**
+     * Regular Savings Account
+     */
     REGULARSAVINGS("02"),
+    /**
+     * Moneymarket Savings
+     */
     MONEYMARKETSAVINGS("03");
 
     private final String code;
