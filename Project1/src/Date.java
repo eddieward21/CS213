@@ -194,7 +194,7 @@ public class Date implements Comparable<Date> {
         return this.day;
     }
     /**
-     * @return year
+     @return year
      * */
     public int getYear(){
         return this.year;
@@ -202,7 +202,6 @@ public class Date implements Comparable<Date> {
 
     /**
     Test method for Date class
-
      **/
     public static void testDateClass() {
         System.out.println("Tests...\n");
@@ -211,27 +210,32 @@ public class Date implements Comparable<Date> {
         int currentYear = today.getYear();
 
         // Valid date
-        Date validDate = new Date(currentYear - 20, 5, 15);
+        Date validDate = new Date(2000, 5, 15);
+        System.out.println("Testing: " + validDate);
+        System.out.println("Valid? " + validDate.isValid());
+
+        // Valid date 2
+        Date validDate = new Date(2003, 2, 3);
         System.out.println("Testing: " + validDate);
         System.out.println("Valid? " + validDate.isValid());
 
         //User under 18
-        Date underageDate = new Date(currentYear - 15, 8, 10);
+        Date underageDate = new Date(currentYear - 16, 8, 10);
         System.out.println("Testing: " + underageDate);
         System.out.println("Valid? " + underageDate.isValid());
 
         // Future Date
-        Date futureDate = new Date(currentYear + 1, 1, 1);
+        Date futureDate = new Date(currentYear+1, 1, 1);
         System.out.println("Testing: " + futureDate);
         System.out.println("Valid? " + futureDate.isValid());
 
         // Feb 30 (Non-existent)
-        Date invalidFebDate = new Date(2023, 2, 30);
+        Date invalidFebDate = new Date(2000, 2, 30);
         System.out.println("Testing: " + invalidFebDate);
         System.out.println("Valid? " + invalidFebDate.isValid());
 
         //Month 0
-        Date invalidMonth = new Date(2023, 0, 15);
+        Date invalidMonth = new Date(2025, 0, 15);
         System.out.println("Testing: " + invalidMonth);
         System.out.println("Valid? " + invalidMonth.isValid());
 
