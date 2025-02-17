@@ -9,8 +9,11 @@ import java.util.Scanner;
 
 public class TransactionManager {
     private boolean RUNNING = true;
+    private static final int TRUE = 1;
+    private static final int FALSE = 0;
     private AccountDatabase accountDatabase;
     private Archive accountArchive;
+
 
     /**
      * Create an instance of the account database and the archive
@@ -28,9 +31,9 @@ public class TransactionManager {
      */
     private static int moneyMarketValid(String balance){
         if(Integer.parseInt(balance) < 2500){
-            return 0;
+            return FALSE;
         }
-        return 1;
+        return TRUE;
     }
 
     /**
@@ -59,22 +62,11 @@ public class TransactionManager {
         String balance = tokens[6];
         String dob = tokens[5];
 
-        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
-            if(moneyMarketValid(balance) == 0){
-                System.out.println("Minimum of $2,000 to open a Money Market account.");
-                return;
-            }
-        }
-
         Branch branch = getBranch(branchStr);
         if (branch == null) return;  // Exit if invalid branch.
 
         AccountType accountType = getAccountType(accountTypeStr);
         if (accountType == null) return;  // Exit if invalid account type.
-
-        if(validInitialDeposit(balance) != 1){
-            return;
-        }
 
         Date date = createDate(dob);
 
@@ -92,15 +84,27 @@ public class TransactionManager {
         }
 
         Profile profile = new Profile(fname, lname, date);
-        if(accountDatabase.lookUp(profile, accountType) != -1) return;
+        if(accountDatabase.lookUp(profile, accountType) != -1){
+            System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
+            return;
+        }
+
+        if(validInitialDeposit(balance) != 1){
+            return;
+        }
+
+        if(accountTypeStr.equalsIgnoreCase("moneymarket")){
+            if(moneyMarketValid(balance) == 0){
+                System.out.println("Minimum of $2,000 to open a Money Market account.");
+                return;
+            }
+        }
 
         AccountNumber accountNumber = generateAccountNumber(branch, accountType);
         Account account = new Account(accountNumber, profile, Integer.parseInt(balance));
 
         if (accountDatabase.add(account)) {
             System.out.println(accountTypeStr.toUpperCase() + " account " + account.getAccountNumberStr() + " has been opened.");
-        } else {
-            System.out.println(fname + " " + lname + " already has a " + accountTypeStr + " account.");
         }
     }
 
@@ -112,7 +116,7 @@ public class TransactionManager {
     private int validInitialDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println("Initial deposit cannot be 0 or negative.");
@@ -120,7 +124,7 @@ public class TransactionManager {
         } catch (NumberFormatException e) {
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -218,7 +222,7 @@ public class TransactionManager {
     private int validDeposit(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println(balance + " - deposit cannot be 0 or negative.");
@@ -227,7 +231,7 @@ public class TransactionManager {
             // Handle the case where balance is not a valid integer
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -260,7 +264,7 @@ public class TransactionManager {
     private int validWithdrawl(String balance) {
         try {
             if (Integer.parseInt(balance) > 0) {
-                return 1;
+                return TRUE;
             }
             else{
                 System.out.println(balance + " - deposit cannot be 0 or negative.");
@@ -269,7 +273,7 @@ public class TransactionManager {
             // Handle the case where balance is not a valid integer
             System.out.println("For input string: " + balance + " - not a valid amount.");
         }
-        return 0;
+        return FALSE;
     }
 
     /**
@@ -313,13 +317,17 @@ public class TransactionManager {
             System.out.println("Account database is empty!");
             return;
         }
-        System.out.println("*List of accounts in the account database.");
+        System.out.println("\n*List of accounts in the account database.");
         Account[] accounts = accountDatabase.getAccounts();
         for(int i = 0; i < accountDatabase.getSize(); i++){
             System.out.println(accounts[i].toString());
         }
-        System.out.println("*end of list.");
+        System.out.println("*end of list.\n");
     }
+
+
+
+
 
 
     /**
@@ -351,9 +359,7 @@ public class TransactionManager {
                 printDatabase();
                 break;
             case "PA":
-                System.out.println("*List of closed accounts in the archive.");
                 accountDatabase.printArchive();
-                System.out.println("*end of list.");
                 break;
             case "PB":
                 accountDatabase.printByBranch();
@@ -379,19 +385,17 @@ public class TransactionManager {
         System.out.println("Transaction Manager is running.");
         Scanner scanner = new Scanner(System.in);
 
-        // Infinite loop to keep reading commands until 'Q' is entered
         while (RUNNING) {
             System.out.print("Enter command: ");
             String command = scanner.nextLine().trim();
-
             if ("Q".equals(command)) {
                 break;
             }
-
-            // Handle different commands (example: transaction processing, etc.)
+            if (command.isEmpty()) {
+                continue;
+            }
             inputCommands(command);
         }
-
         scanner.close();
         System.out.println("Transaction Manager is terminated.");
     }
